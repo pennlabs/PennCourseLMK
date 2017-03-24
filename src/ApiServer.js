@@ -26,10 +26,6 @@ var GetCourseInfo = (course, callback) => {
   )
 }
 
-var info = GetCourseInfo('cis110001', (result) => {
-  console.log(result)
-})
-
 module.exports = {
   GetCourseInfo: GetCourseInfo
 }

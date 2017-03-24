@@ -1,9 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-const assert = require('assert')
 const path = require('path')
-
 const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
 
@@ -22,7 +20,7 @@ app.post('/submitted', (req, res) => {
   ApiServer.GetCourseInfo(req.body.course, (info) => {
     let testing = true
 
-    if (testing /*!info.open*/) {
+    if (testing /* !info.open */) {
       MongoHelper.AddEmailToCourse(req.body.course, req.body.email)
       MongoHelper.GetEmailsFromCourse(req.body.course) // Debugging
     } else {
