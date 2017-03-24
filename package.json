@@ -1,0 +1,29 @@
+{
+  "name": "penncourselmk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongodb": "^2.2.25",
+    "penn-sdk": "^0.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pennlabs/PennCourseLMK.git"
+  },
+  "author": "Suzanne Knop, Brandon Lin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pennlabs/PennCourseLMK/issues"
+  },
+  "homepage": "https://github.com/pennlabs/PennCourseLMK#readme"
+}
