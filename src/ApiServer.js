@@ -39,7 +39,7 @@ var getAllCourseInfo = (dept, callback) => {
     }, (result) => {
       var c = result
       if (c) {
-        b = []
+        var b = []
         c.forEach( (element) => {
           var name = element.section_id_normalized + ": " + element.section_title
           var status = !element.is_closed
@@ -61,7 +61,7 @@ var fetchDepartments = (callback) => {
     if(err) {
       console.log(err)
     }
-    b = []
+    var b = []
     JSON.parse(body)['result']['values'].forEach( (element) => {
       b.push(element['id'])
     })
@@ -69,14 +69,19 @@ var fetchDepartments = (callback) => {
   })
 }
 
-// var getAllCourses = (callback) => {
-//   fetchDepartments(() => {}).forEach(
-
-//   )
-// }
+var getAllCourses = (callback) => {
+  var courses = {}
+  fetchDepartments( (depts) => {
+    depts.forEach( (d) => {
+      getAllCourseInfo(d, (e) => courses[d] = e)
+    })
+  })
+  callback(courses)
+}
 
 module.exports = {
   getCourseInfo: getCourseInfo,
   getAllCourseInfo: getAllCourseInfo,
-  fetchDepartments: fetchDepartments
+  fetchDepartments: fetchDepartments,
+  getAllCourses: getAllCourses
 }
