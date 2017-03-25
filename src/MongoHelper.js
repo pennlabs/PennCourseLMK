@@ -64,10 +64,13 @@ const RemoveCourse = (course) => {
   })
 }
 
-const GetAllCoursesAndEmails = () => {
+const GetAllCoursesAndEmails = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    findAllDocuments(db, () => { db.close() })
+    findAllDocuments(db, (docs) => { 
+      callback(docs)
+      db.close() 
+    })
   })
 }
 
