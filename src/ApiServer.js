@@ -20,6 +20,8 @@ var getCourseInfo = (course, callback) => {
       if (c) {
         var name = c.section_id_normalized + ": " + c.section_title
         var status = !c.is_closed
+        var number = c.course_number
+        var section = c.section_number
         var obj =  {'open': status, 'name': name}
       } else {
         console.log('This course doesnt exist!')
@@ -41,7 +43,9 @@ var getAllCourseInfo = (dept, callback) => {
         c.forEach( (element) => {
           var name = element.section_id_normalized + ": " + element.section_title
           var status = !element.is_closed
-          var obj =  {'open': status, 'name': name}
+          var number = element.course_number
+          var section = element.section_number
+          var obj =  {'open': status, 'name': name, 'number': number, 'section': section}
           b.push(obj)
         })
       } else {
