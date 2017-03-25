@@ -10,7 +10,7 @@ registrar = new Registrar(API_USERNAME, API_PASSWORD)
 const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
 // Returns {closed: boolean, name: String}
-var GetCourseInfo = (course, callback) => {
+var getCourseInfo = (course, callback) => {
   return (
     registrar.search({
       'course_id': course,
@@ -29,6 +29,29 @@ var GetCourseInfo = (course, callback) => {
   )
 }
 
+var getAllCourseInfo = (dept, callback) => {
+  return (
+    registrar.search({
+      'course_id': dept,
+      'term': '2017C'
+    }, (result) => {
+      var c = result
+      if (c) {
+        b = []
+        c.forEach( (element) => {
+          var name = element.section_id_normalized + ": " + element.section_title
+          var status = !element.is_closed
+          var obj =  {'open': status, 'name': name}
+          b.push(obj)
+        })
+      } else {
+        console.log('This course doesnt exist!')
+      }
+      callback(b)
+    })
+  )
+}
+
 var fetchDepartments = (callback) => {
   request(BASE_URL, (err, res, body) => {
     if(err) {
@@ -42,7 +65,14 @@ var fetchDepartments = (callback) => {
   })
 }
 
+// var getAllCourses = (callback) => {
+//   fetchDepartments(() => {}).forEach(
+
+//   )
+// }
+
 module.exports = {
-  GetCourseInfo: GetCourseInfo,
+  getCourseInfo: getCourseInfo,
+  getAllCourseInfo: getAllCourseInfo,
   fetchDepartments: fetchDepartments
 }
