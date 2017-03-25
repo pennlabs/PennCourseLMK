@@ -32,6 +32,15 @@ const removeDocument = (key, db, callback) => {
   })
 }
 
+const findAllDocuments = (db, callback) => {
+  const collection = db.collection('documents')
+  collection.find().toArray((err, docs) => {
+    if (err) console.log(err)
+    console.log(docs)
+    callback(docs)
+  })
+}
+
 // ------ Public functions --------
 const AddEmailToCourse = (course, email) => {
   const doc = {[course]: email}
@@ -55,8 +64,18 @@ const RemoveCourse = (course) => {
   })
 }
 
+const GetAllCoursesAndEmails = () => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    findAllDocuments(db, () => { db.close() })
+  })
+}
+
+
+
 module.exports = {
   AddEmailToCourse: AddEmailToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
-  RemoveCourse: RemoveCourse
+  RemoveCourse: RemoveCourse,
+  GetAllCoursesAndEmails: GetAllCoursesAndEmails
 }
