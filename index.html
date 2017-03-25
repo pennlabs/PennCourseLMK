@@ -11,8 +11,29 @@
     </div>
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" name="email">
-      <input type="text" placeholder="course" name="course">
+      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course"></div>
       <button type="submit">Submit</button>
     </form>
+    <script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./js/typeahead.bundle.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var depts = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.whitespace,
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: ['asdf', 'thing']
+          });
+
+        $('#bloodhound .typeahead').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'states',
+          source: depts
+        });
+      });
+    </script>
   </body>
 </html>
