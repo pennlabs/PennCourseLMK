@@ -36,7 +36,6 @@ const findAllDocuments = (db, callback) => {
   const collection = db.collection('documents')
   collection.find().toArray((err, docs) => {
     if (err) console.log(err)
-    console.log(docs)
     callback(docs)
   })
 }

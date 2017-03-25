@@ -2,22 +2,31 @@ const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
 
 // -----------Helper functions -------------
-var FindEmailsForCoursessWithOpenings = (callback) => {
+var FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
       var courseName = Object.keys(doc)[1] 
-      ApiServer.GetCourseInfo(courseName, (status) => {
-        console.log(status) 
-        if (status.open) {
+      ApiServer.GetCourseInfo(courseName, (courseInfo) => {
+        if (courseInfo.open) {
           var courseEmails = doc[courseName]
-          callback(courseEmails)
-          //send an email to people associated with course
+          callback(courseInfo.name, courseEmails)
         }
       })
     })
   })
 }
 
+// -----------Public functions -------------
+
+var SendEmailsToOpenCourses = () => {
+  FindEmailsAndCoursesWithOpenings( (courseName, courseEmails) => {
+    //going to use emailjs to send out emails to users
+    //then need to remove emails from db
+    console.log(courseName)
+    console.log(courseEmails)
+  })
+}
+
 module.exports = {
-  FindEmailsForCoursessWithOpenings: FindEmailsForCoursessWithOpenings
+  SendEmailsToOpenCourses: SendEmailsToOpenCourses
 }

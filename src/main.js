@@ -4,6 +4,11 @@ const app = express()
 const path = require('path')
 const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
+const ScheduledJobs = require('./ScheduledJobs.js')
+ 
+var Schedule = require('node-schedule');
+
+Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
 app.use(bodyParser.urlencoded({extended: true}))
 
