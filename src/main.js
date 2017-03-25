@@ -15,6 +15,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/../index.html'))
 })
 
+app.use(express.static(__dirname + '/js'))
+
 app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.GetCourseInfo(req.body.course, (info) => {
