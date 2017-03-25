@@ -1,10 +1,13 @@
 var api = require("penn-sdk")
+var request = require('request')
 Registrar = api.Registrar
 
 var API_USERNAME = "UPENN_OD_endI_1003504"
 var API_PASSWORD = "1p5smognls3qbsli6ml50vb97d"
 
 registrar = new Registrar(API_USERNAME, API_PASSWORD)
+
+const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
 // Returns {closed: boolean, name: String}
 var GetCourseInfo = (course, callback) => {
@@ -26,6 +29,20 @@ var GetCourseInfo = (course, callback) => {
   )
 }
 
+var fetchDepartments = (callback) => {
+  request(BASE_URL, (err, res, body) => {
+    if(err) {
+      console.log(err)
+    }
+    b = []
+    JSON.parse(body)['result']['values'].forEach( (element) => {
+      b.push(element['id'])
+    })
+    callback(b)
+  })
+}
+
 module.exports = {
-  GetCourseInfo: GetCourseInfo
+  GetCourseInfo: GetCourseInfo,
+  fetchDepartments: fetchDepartments
 }
