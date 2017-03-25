@@ -6,7 +6,9 @@ const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
 const ScheduledJobs = require('./ScheduledJobs.js')
  
-var Schedule = require('node-schedule');
+var Schedule = require('node-schedule')
+
+ScheduledJobs.SendEmailsToOpenCourses()
 
 Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
@@ -19,6 +21,8 @@ app.listen(3000, () => {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/../index.html'))
 })
+
+app.use(express.static(__dirname + '/js'))
 
 app.post('/submitted', (req, res) => {
   // Checks if course is open

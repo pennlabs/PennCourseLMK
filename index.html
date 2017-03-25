@@ -7,12 +7,15 @@
   </head>
   <body>
     <div id="container">
-      <div id="title"/> Hi, this is penn course lmk.</div>
+      <div id="title"> Hi, this is penn course lmk.</div>
     </div>
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" name="email">
-      <input type="text" placeholder="course" name="course">
+      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course"></div>
       <button type="submit">Submit</button>
     </form>
+    <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
   </body>
 </html>

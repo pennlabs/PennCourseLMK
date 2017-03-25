@@ -40,6 +40,14 @@ const findAllDocuments = (db, callback) => {
   })
 }
 
+const removeAllFromArrayField = (key, db, callback) => {
+  const collection = db.collection('documents')
+  console.log(key)
+  collection.update(
+    {$set: { key : [] }}
+  )
+}
+
 // ------ Public functions --------
 const AddEmailToCourse = (course, email) => {
   const doc = {[course]: email}
@@ -73,11 +81,19 @@ const GetAllCoursesAndEmails = (callback) => {
   })
 }
 
+const RemoveAllEmailsFromCourse = (course, callback) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    removeAllFromArrayField(course, db, () => { db.close() })
+  })
+}
+
 
 
 module.exports = {
   AddEmailToCourse: AddEmailToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
   RemoveCourse: RemoveCourse,
-  GetAllCoursesAndEmails: GetAllCoursesAndEmails
+  GetAllCoursesAndEmails: GetAllCoursesAndEmails,
+  RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse
 }
