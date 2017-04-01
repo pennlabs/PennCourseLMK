@@ -2,8 +2,7 @@ const MongoClient = require('mongodb').MongoClient
 const url = 'mongodb://localhost:27017/penncourselmk'
 
 // ------ Helper functions -------
-const insertDocuments = (doc, db, callback) => {
-  const collection = db.collection('documents')
+const insertDocuments = (doc, collection, callback) => {
   const bulk = collection.initializeUnorderedBulkOp()
   const key = Object.keys(doc)[0]
   const val = doc[key]
@@ -14,21 +13,19 @@ const insertDocuments = (doc, db, callback) => {
   callback()
 }
 
-const findDocuments = (key, db, callback) => {
-  const collection = db.collection('documents')
+const findDocuments = (key, collection, callback) => {
   collection.find({[key]: {$exists: true}}).toArray((err, docs) => {
     if (err) console.log(err)
     console.log("Found the following records")
     console.log(docs)
-    callback(docs);
+    callback(docs)
   })
 }
 
-const removeDocument = (key, db, callback) => {
-  const collection = db.collection('documents')
+const removeDocument = (key, collection, callback) => {
   collection.deleteOne({ [key] : {$exists: true}}, (err, result) => {
     if (err) console.log(err)
-    callback(result);
+    callback(result)
   })
 }
 
@@ -37,21 +34,34 @@ const AddEmailToCourse = (course, email) => {
   const doc = {[course]: email}
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    insertDocuments(doc, db, () => { db.close() })
+    insertDocuments(doc, db.collection('emails'), () => { db.close() })
   })
 }
 
 const GetEmailsFromCourse = (course) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    findDocuments(course, db, () => { db.close() })
+    findDocuments(course, db.collection('emails'), () => { db.close() })
   })
 }
 
 const RemoveCourse = (course) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    removeDocument(course, db, () => { db.close() })
+    removeDocument(course, db.collection('emails'), () => { db.close() })
+  })
+}
+
+// Increments the number of times a course has been requested in the analytics
+// collection
+const IncrementCourseCount = (course) => {
+  MongoClient.connect(url, (err, db) => {
+    if (err) console.log(err)
+    findDocuments(course, db.collection('analytics'), (docs) => {
+      const doc = docs[0] ? {[course]: docs[0] + 1} : {[course]: 1}
+      console.log(doc)
+      insertDocuments(doc, db.collection('analytics'), () => { db.close() })
+    })
   })
 }
 
