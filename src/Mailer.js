@@ -1,4 +1,5 @@
 var email = require("emailjs")
+var MongoHelper = require("./MongoHelper.js")
 
 var server = email.server.connect({
     user: "penncourselmk@gmail.com",
@@ -8,9 +9,15 @@ var server = email.server.connect({
     port: 587
 });
 
-server.send({
-    text: "stat 430 is openn!!!!",
-    from: "Penn Course LMK <penncourselmk@gmail.com>",
-    to: "Brandon <blin1283@gmail.com>",
-    subject: "stat 430"
-}, function(err, message) { console.log( err || message);});
+var sendEmail = (course, email, callback) => {
+	server.send({
+	    text: course + " is openn!!!!",
+	    from: "Penn Course LMK <penncourselmk@gmail.com>",
+	    to: email,
+	    subject: course,
+	}, function(err, message) { callback( err || message);});
+}
+
+module.exports = {
+	sendEmail: sendEmail,
+}
