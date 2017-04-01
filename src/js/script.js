@@ -1,34 +1,28 @@
 $(document).ready(function(){
-  var depts = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.whitespace,
+  var courses = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('section_id'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-      local: ['AAMW', 'ACCT', 'AFAM', 'AFRC', 'AFST', 'ALAN', 'AMCS', 'AMES', 'ANCH', 
-              'ANCS', 'ANEL', 'ANTH', 'ARAB', 'ARCH', 'ARTH', 'ASAM', 'ASTR', 'BCHE', 
-              'BE', 'BENF', 'BENG', 'BEPP', 'BFLW', 'BFMD', 'BIBB', 'BIOE', 'BIOH', 
-              'BIOL', 'BIOT', 'BMB', 'BPUB', 'BRYN', 'BSTA', 'CAMB', 'CBE', 'CHE', 'CHEM', 
-              'CHIN', 'CINE', 'CIS', 'CIT', 'CLST', 'COGS', 'COLL', 'COML', 'COMM', 'CPLN', 
-              'CRIM', 'CSE', 'DEMG', 'DTCH', 'DYNM', 'EALC', 'EAS', 'ECON', 'EDUC', 'EE', 'EEUR', 
-              'ENGL', 'ENGR', 'ENM', 'ENVS', 'ESE', 'FILM', 'FNAR', 'FNCE', 'FOLK', 'FREN', 
-              'FRSM', 'GAFL', 'GCB', 'GENH', 'GEOL', 'GLAW', 'GMED', 'GREK', 'GRMN', 'GSOC', 
-              'GSWS', 'GUJR', 'HCMG', 'HEBR', 'HIND', 'HIST', 'HPR', 'HSOC', 'HSPV', 'HSSC', 
-              'IMUN', 'INSC', 'INSR', 'INTG', 'INTR', 'INTS', 'IPD', 'ITAL', 'JPAN', 'JWST', 
-              'KORN', 'LALS', 'LARP', 'LATN', 'LAW', 'LGIC', 'LGST', 'LING', 'LSMP', 'LTAM', 
-              'MATH', 'MCS', 'MEAM', 'MED', 'MGEC', 'MGMT', 'MKSE', 'MKTG', 'MLA', 'MLYM', 
-              'MMP', 'MSE', 'MSSP', 'MUSA', 'MUSC', 'NANO', 'NELC', 'NETS', 'NGG', 'NPLD', 
-              'NURS', 'OIDD', 'OPIM', 'PERS', 'PHIL', 'PHRM', 'PHYS', 'PPE', 'PRTG', 'PSCI', 
-              'PSSA', 'PSYC', 'PSYS', 'PUBH', 'PUNJ', 'REAL', 'RELS', 'ROML', 'RUSS', 'SARS', 
-              'SAST', 'SCND', 'SKRT', 'SLAV', 'SOCI', 'SPAN', 'STAT', 'STSC', 'SWRK', 'SYS', 
-              'TAML', 'TCOM', 'TELU', 'THAR', 'TRAN', 'TURK', 'URBS', 'URDU', 'VCSN', 'VIPR', 
-              'VLST', 'WH', 'WHCP', 'WHMP', 'WRIT', 'WSTD', 'YDSH']
+    prefetch: '/courses'
     });
 
   $('#bloodhound .typeahead').typeahead({
     hint: true,
-    highlight: true,
-    minLength: 1
+    highlight: false,
+    minLength: 1,
   },
   {
     name: 'states',
-    source: depts
+    source: courses,
+    display: 'section_id',
+    templates: {
+      empty: 'No courses found.',
+      suggestion: function(data) {
+        var l = ''
+        if(data.instructors.length != 0){ 
+          var l = data.instructors.join(', ')
+        }
+        return '<p><i>' + data.section_id + '</i> - ' + data.course_title + '<br><small>' + l + '</small></p>';
+      }
+    }
   });
 });
