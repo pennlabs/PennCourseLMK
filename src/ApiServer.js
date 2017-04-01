@@ -9,43 +9,42 @@ registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
 const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
-// Returns {closed: boolean, name: String}
-var getCourseInfo = (course, callback) => {
+// Returns {open: boolean, name: String}
+const getCourseInfo = (course, callback) => {
   return (
     registrar.search({
       'course_id': course,
       'term': '2017C'
     }, (result) => {
-      var c = result[0]
+      const c = result[0]
       if (c) {
-        var name = c.section_id_normalized + ": " + c.section_title
-        var status = !c.is_closed
-        var number = c.course_number
-        var section = c.section_number
-        var obj =  {'open': status, 'name': name}
+        const name = c.section_id_normalized + ": " + c.section_title
+        const status = !c.is_closed
+        const number = c.course_number
+        const section = c.section_number
+        callback({'open': status, 'name': name})
       } else {
-        console.log('This course doesnt exist!')
+        callback(null, 'This course doesnt exist!')
       }
-      callback(obj)
     })
   )
 }
 
-var getAllCourseInfo = (dept, callback) => {
+const getAllCourseInfo = (dept, callback) => {
   return (
     registrar.search({
       'course_id': dept,
       'term': '2017C'
     }, (result) => {
-      var c = result
+      const c = result
       if (c) {
         var b = []
         c.forEach( (element) => {
-          var name = element.section_id_normalized + ": " + element.section_title
-          var status = !element.is_closed
-          var number = element.course_number
-          var section = element.section_number
-          var obj =  {'open': status, 'name': name, 'number': number, 'section': section}
+          const name = element.section_id_normalized + ": " + element.section_title
+          const status = !element.is_closed
+          const number = element.course_number
+          const section = element.section_number
+          const obj =  {'open': status, 'name': name, 'number': number, 'section': section}
           b.push(obj)
         })
       } else {
@@ -56,7 +55,7 @@ var getAllCourseInfo = (dept, callback) => {
   )
 }
 
-var fetchDepartments = (callback) => {
+const fetchDepartments = (callback) => {
   request(BASE_URL, (err, res, body) => {
     if(err) {
       console.log(err)
@@ -69,8 +68,8 @@ var fetchDepartments = (callback) => {
   })
 }
 
-var getAllCourses = (callback) => {
-  var courses = {}
+const getAllCourses = (callback) => {
+  let courses = {}
   fetchDepartments( (depts) => {
     depts.forEach( (d) => {
       getAllCourseInfo(d, (e) => courses[d] = e)
