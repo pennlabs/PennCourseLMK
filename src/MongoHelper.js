@@ -35,7 +35,7 @@ const replaceDocument = (key, val, collection, callback) => {
   collection.replaceOne(
     {[key] : {$exists: true}},
     {[key] : val},
-    {upsert:true},
+    {upsert: true},
     (err, result) => {
       if (err) console.log(err)
       callback(result)
