@@ -1,12 +1,18 @@
 from penn import Registrar
 
-# Needs to be run once a semester in order to fetch all the courses
+
 def fetch_courses(term):
+    '''Fetches the courses in the given term. The
+    function uses the Penn SDK Registrar in order to
+    obtain this list.
+
+    Only needs to be run once a semester in order to fetch all the courses.'''
     r = Registrar("UPENN_OD_endI_1003504","1p5smognls3qbsli6ml50vb97d")
     s = r.search({'term': term})
     courses = []
     for i in s:
-        section_id = i['section_id']
+        s = i['section_id']
+        section_id = ' '.join([s[0:4].strip(), s[4:7], s[7:10]])
         course_title = i['course_title']
         instructors = [j['name'] for j in i['instructors']]
         meetings = i['meetings']
