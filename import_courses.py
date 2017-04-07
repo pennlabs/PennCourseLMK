@@ -10,7 +10,10 @@ def fetch_courses(term):
     obtain this list.
 
     Only needs to be run once a semester in order to fetch all the courses.'''
-    r = Registrar(os.environ['PENN_SDK_USERNAME'], os.environ['PENN_SDK_PASSWORD'])
+    try:
+        r = Registrar(os.environ['PENN_SDK_USERNAME'], os.environ['PENN_SDK_PASSWORD'])
+    except KeyError:
+        return {'error': 'No Penn SDK user/password found.'}
     s = r.search({'term': term})
     courses = []
     for i in s:
