@@ -1,5 +1,6 @@
 const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
+const Mailer = require('./Mailer.js')
 
 // -----------Helper functions -------------
 var FindEmailsAndCoursesWithOpenings = (callback) => {
@@ -19,14 +20,18 @@ var FindEmailsAndCoursesWithOpenings = (callback) => {
 // -----------Public functions -------------
 
 var SendEmailsToOpenCourses = () => {
-  FindEmailsAndCoursesWithOpenings( (courseName, courseEmails) => {
+  FindEmailsAndCoursesWithOpenings( (courseName, backendCourseName, courseEmails) => {
     //going to use emailjs to send out emails to users
     //then need to remove emails from db
     console.log('logging')
     console.log(courseName)
     console.log(courseEmails)
-
-    MongoHelper.RemoveAllEmailsFromCourse(courseName)
+    courseEmails.forEach((email) => {
+      Mailer.sendEmail(courseName, email, (err, message) => {
+        if (err) console.log(err)
+      })
+    })
+    MongoHelper.RemoveAllEmailsFromCourse(backendCourseName)
   })
 }
 

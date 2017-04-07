@@ -28,7 +28,7 @@ const removeDocument = (key, db, callback) => {
   const collection = db.collection('documents')
   collection.deleteOne({ [key] : {$exists: true}}, (err, result) => {
     if (err) console.log(err)
-    callback(result);
+    callback(result)
   })
 }
 
@@ -42,10 +42,12 @@ const findAllDocuments = (db, callback) => {
 
 const removeAllFromArrayField = (key, db, callback) => {
   const collection = db.collection('documents')
-  console.log(key)
   collection.update(
-    {$set: { key : [] }}
-  )
+    {[key]: {$exists: true}},
+    {$set: { [key] : [] }}
+  ).catch((e) => {
+    console.log(e)
+  });
 }
 
 // ------ Public functions --------

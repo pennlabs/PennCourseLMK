@@ -6,11 +6,11 @@ const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
 const ScheduledJobs = require('./ScheduledJobs.js')
  
-var Schedule = require('node-schedule')
+var Schedule = require('node-schedule');
 
-ScheduledJobs.SendEmailsToOpenCourses()
+ScheduledJobs.SendEmailsToOpenCourses();
 
-Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+// Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -26,7 +26,7 @@ app.use(express.static(__dirname + '/js'))
 
 app.post('/submitted', (req, res) => {
   // Checks if course is open
-  ApiServer.GetCourseInfo(req.body.course, (info) => {
+  ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
 
     if (testing /* !info.open */) {
