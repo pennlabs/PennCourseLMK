@@ -7,3 +7,6 @@ Getting started:
 
 ## In production
 Set the `LMK_PASSWORD` environment variable appropriately.
+
+## Fetching the current courses
+To fetch the list of all courses for a given semester, first do `pip install -r requirements.txt`, then `python import_courses.py <semester_id>`. `semester_id` should be in the format `2017C`, the year followed by A,B, or C (Spring, Summer, Fall).

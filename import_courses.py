@@ -1,6 +1,8 @@
 from penn import Registrar
 import json
 import sys
+import os
+
 
 def fetch_courses(term):
     '''Fetches the courses in the given term. The
@@ -8,7 +10,7 @@ def fetch_courses(term):
     obtain this list.
 
     Only needs to be run once a semester in order to fetch all the courses.'''
-    r = Registrar("UPENN_OD_endI_1003504","1p5smognls3qbsli6ml50vb97d")
+    r = Registrar(os.environ['PENN_SDK_USERNAME'], os.environ['PENN_SDK_PASSWORD'])
     s = r.search({'term': term})
     courses = []
     for i in s:
