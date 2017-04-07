@@ -6,7 +6,7 @@ var FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
       var backendCourseName = Object.keys(doc)[1] 
-      ApiServer.GetCourseInfo(backendCourseName, (courseInfo) => {
+      ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
         if (courseInfo.open) {
           var courseEmails = doc[backendCourseName]
           callback(courseInfo.name, backendCourseName, courseEmails)
