@@ -1,5 +1,6 @@
 from penn import Registrar
-
+import json
+import sys
 
 def fetch_courses(term):
     '''Fetches the courses in the given term. The
@@ -19,3 +20,7 @@ def fetch_courses(term):
         meeting_days = [meeting['meeting_days'] + ' ' + meeting['start_time'] + ' - ' + meeting['end_time'] for meeting in meetings]
         courses.append({'section_id': section_id, 'course_title': course_title, 'instructors': instructors, 'meeting_days': meeting_days})
     return courses
+
+with open('courses.json','w') as f:
+    json.dumps(fetch_courses(sys.argv[1]), f)
+    f.close()
