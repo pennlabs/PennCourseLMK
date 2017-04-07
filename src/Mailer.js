@@ -1,5 +1,4 @@
 var email = require("emailjs")
-var MongoHelper = require("./MongoHelper.js")
 
 var server = email.server.connect({
     user: "penncourselmk@gmail.com",
