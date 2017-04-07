@@ -2,15 +2,12 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
-const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
+const ApiServer = require('./ApiServer.js')
 const ScheduledJobs = require('./ScheduledJobs.js')
- 
 var Schedule = require('node-schedule');
 
-ScheduledJobs.SendEmailsToOpenCourses();
-
-// Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
 app.use(bodyParser.urlencoded({extended: true}))
 
