@@ -14,7 +14,7 @@ var sendEmail = (course, email, callback) => {
 	    from: "Penn Course LMK <penncourselmk@gmail.com>",
 	    to: email,
 	    subject: course,
-	}, function(err, message) { callback( err || message);});
+	}, function(err, message) { callback( err, message);});
 }
 
 var sendAllEmails = (course, emails, callback) => {
