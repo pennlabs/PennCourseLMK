@@ -1,4 +1,5 @@
 var api = require("penn-sdk")
+var request = require('request')
 Registrar = api.Registrar
 
 var API_USERNAME = "UPENN_OD_endI_1003504"
@@ -6,8 +7,10 @@ var API_PASSWORD = "1p5smognls3qbsli6ml50vb97d"
 
 registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
+const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
+
 // Returns {closed: boolean, name: String}
-var GetCourseInfo = (course, callback) => {
+var getCourseInfo = (course, callback) => {
   return (
     registrar.search({
       'course_id': course,
@@ -17,6 +20,8 @@ var GetCourseInfo = (course, callback) => {
       if (c) {
         var name = c.section_id_normalized + ": " + c.section_title
         var status = !c.is_closed
+        var number = c.course_number
+        var section = c.section_number
         var obj =  {'open': status, 'name': name}
       } else {
         console.log('This course doesnt exist!')
@@ -26,6 +31,57 @@ var GetCourseInfo = (course, callback) => {
   )
 }
 
+var getAllCourseInfo = (dept, callback) => {
+  return (
+    registrar.search({
+      'course_id': dept,
+      'term': '2017C'
+    }, (result) => {
+      var c = result
+      if (c) {
+        var b = []
+        c.forEach( (element) => {
+          var name = element.section_id_normalized + ": " + element.section_title
+          var status = !element.is_closed
+          var number = element.course_number
+          var section = element.section_number
+          var obj =  {'open': status, 'name': name, 'number': number, 'section': section}
+          b.push(obj)
+        })
+      } else {
+        console.log('This course doesnt exist!')
+      }
+      callback(b)
+    })
+  )
+}
+
+var fetchDepartments = (callback) => {
+  request(BASE_URL, (err, res, body) => {
+    if(err) {
+      console.log(err)
+    }
+    var b = []
+    JSON.parse(body)['result']['values'].forEach( (element) => {
+      b.push(element['id'])
+    })
+    callback(b)
+  })
+}
+
+var getAllCourses = (callback) => {
+  var courses = {}
+  fetchDepartments( (depts) => {
+    depts.forEach( (d) => {
+      getAllCourseInfo(d, (e) => courses[d] = e)
+    })
+  })
+  callback(courses)
+}
+
 module.exports = {
-  GetCourseInfo: GetCourseInfo
+  getCourseInfo: getCourseInfo,
+  getAllCourseInfo: getAllCourseInfo,
+  fetchDepartments: fetchDepartments,
+  getAllCourses: getAllCourses
 }
