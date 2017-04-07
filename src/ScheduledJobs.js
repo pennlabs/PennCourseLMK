@@ -21,9 +21,6 @@ var FindEmailsAndCoursesWithOpenings = (callback) => {
 
 var SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings( (courseName, backendCourseName, courseEmails) => {
-    //going to use emailjs to send out emails to users
-    //then need to remove emails from db
-    console.log('logging')
     console.log(courseName)
     console.log(courseEmails)
     courseEmails.forEach((email) => {
