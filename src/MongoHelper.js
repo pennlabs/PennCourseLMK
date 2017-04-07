@@ -32,6 +32,22 @@ const removeDocument = (key, db, callback) => {
   })
 }
 
+const findAllDocuments = (db, callback) => {
+  const collection = db.collection('documents')
+  collection.find().toArray((err, docs) => {
+    if (err) console.log(err)
+    callback(docs)
+  })
+}
+
+const removeAllFromArrayField = (key, db, callback) => {
+  const collection = db.collection('documents')
+  console.log(key)
+  collection.update(
+    {$set: { key : [] }}
+  )
+}
+
 // ------ Public functions --------
 const AddEmailToCourse = (course, email) => {
   const doc = {[course]: email}
@@ -55,8 +71,29 @@ const RemoveCourse = (course) => {
   })
 }
 
+const GetAllCoursesAndEmails = (callback) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    findAllDocuments(db, (docs) => { 
+      callback(docs)
+      db.close() 
+    })
+  })
+}
+
+const RemoveAllEmailsFromCourse = (course, callback) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    removeAllFromArrayField(course, db, () => { db.close() })
+  })
+}
+
+
+
 module.exports = {
   AddEmailToCourse: AddEmailToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
-  RemoveCourse: RemoveCourse
+  RemoveCourse: RemoveCourse,
+  GetAllCoursesAndEmails: GetAllCoursesAndEmails,
+  RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse
 }
