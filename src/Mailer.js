@@ -18,6 +18,11 @@ var sendEmail = (course, email, callback) => {
 	}, function(err, message) { callback( err || message);});
 }
 
+var sendAllEmails = (course, emails, callback) => {
+	emails.forEach((element) => {sendEmail(course,element,callback)})
+}
+
 module.exports = {
 	sendEmail: sendEmail,
+	sendAllEmails: sendAllEmails,
 }
