@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.listen(3000, () => {
   console.log('listening on 3000')
+  MongoHelper.CreateCollections()
 })
 
 app.get('/', (req, res) => {
@@ -32,6 +33,7 @@ app.post('/submitted', (req, res) => {
     if (testing /* !info.open */) {
       MongoHelper.AddEmailToCourse(req.body.course, req.body.email)
       MongoHelper.GetEmailsFromCourse(req.body.course) // Debugging
+      MongoHelper.IncrementCourseCount(req.body.course)
     } else {
       console.log('course is already open!!!')
     }
