@@ -2,8 +2,8 @@ var api = require("penn-sdk")
 var request = require('request')
 Registrar = api.Registrar
 
-var API_USERNAME = "UPENN_OD_endI_1003504"
-var API_PASSWORD = "1p5smognls3qbsli6ml50vb97d"
+var API_USERNAME = process.env.PENN_SDK_USERNAME
+var API_PASSWORD = process.env.PENN_SDK_PASSWORD
 
 registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
