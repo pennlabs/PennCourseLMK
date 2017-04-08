@@ -16,6 +16,7 @@
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "request": "^2.81.0",
+    "require": "^2.4.20",
     "should": "^11.2.1"
   },
   "scripts": {
