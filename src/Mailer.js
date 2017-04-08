@@ -25,7 +25,7 @@ var sendEmail = (course, email, callback) => {
 	    from: "Penn Course LMK <penncourselmk@gmail.com>",
 	    to: email,
 	    subject: course + " is now open!",
-	    attachment: [ {data: emailText(course), alternative:true},]
+	    attachment: [ {data: emailText(course), alternative:true} ]
 	}, function(err, message) { callback( err, message);});
 }
 
