@@ -1,6 +1,11 @@
 .title {
   color: rgb(150, 0, 0)
 }
+
+.twitter-typeahead{
+  width: 100%;
+}
+
 .subtitle {
   font-weight: 300;
   margin-left: 10vw;
