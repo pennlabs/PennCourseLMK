@@ -7,6 +7,8 @@ const MongoHelper = require('./MongoHelper.js')
 
 app.use(bodyParser.urlencoded({extended: true}))
 
+app.use('/style', express.static(path.join(__dirname, 'style')))
+
 app.listen(3000, () => {
   console.log('listening on 3000')
   MongoHelper.CreateCollections()
