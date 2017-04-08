@@ -4,6 +4,7 @@ const app = express()
 const path = require('path')
 const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
+const courses = require('../courses.json')['result']
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -14,6 +15,10 @@ app.listen(3000, () => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/../index.html'))
+})
+
+app.get('/courses', (req, res) => {
+  res.send(courses)
 })
 
 app.use(express.static(__dirname + '/js'))
