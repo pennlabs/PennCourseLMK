@@ -1,5 +1,11 @@
 const MongoClient = require('mongodb').MongoClient
-const url = 'mongodb://localhost:27017/penncourselmk'
+let url = 'mongodb://localhost:27017/penncourselmk'
+
+const PRODUCTION_MODE = false
+if (PRODUCTION_MODE) {
+  url = 'mongodb://pennlabs:' + process.env.LMK_PASSWORD +
+  '@ds155080.mlab.com:55080/penncourselmk'
+}
 
 // ------ Helper functions -------
 // Inserts doc into the set with its key if exists, adds doc if doesn't exist
