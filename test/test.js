@@ -35,8 +35,8 @@ describe('Emails in DB', function() {
 
 describe('Courses in DB', function () {
   it('should remove fake course', function (done) {
+    MongoHelper.RemoveCourse('FAKE-011-111');
     MongoClient.connect(url, function (err,db) {
-      db.collection('emails').remove({'FAKE-011-111' : {$exists: true}})
       db.collection('emails').findOne({'FAKE-011-111': {$exists:true}}, (err,doc) => {
         expect(doc).eql(null)
         done()
