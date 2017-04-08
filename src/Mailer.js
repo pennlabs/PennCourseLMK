@@ -1,6 +1,7 @@
 var email = require("emailjs")
 
 
+// ------ Helper functions ------
 var emailText = (course) => {
 	return `<h1>Penn Course LMK</h1>
 	Hello,<br><br>
@@ -20,6 +21,7 @@ var server = email.server.connect({
     port: 587
 });
 
+// ------ Public functions ------
 var sendEmail = (course, email, callback) => {
 	server.send({
 	    from: "Penn Course LMK <penncourselmk@gmail.com>",
