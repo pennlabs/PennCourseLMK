@@ -33,6 +33,37 @@ describe('Emails in DB', function() {
   })
 })
 
+describe('Emails in DB', function () {
+  it('should add multiple emails to fake course', function (done) {
+    MongoHelper.AddEmailToCourse('FAKE-011-111', 'adel@adel.io')
+    MongoHelper.AddEmailToCourse('FAKE-011-111', 'adel@adelio.io')
+    MongoClient.connect(url, function (err,db) {
+      db.collection('emails').findOne({'FAKE-011-111': {$exists:true}}, function (err,doc) {
+        let emails = doc['FAKE-011-111']
+        let email1 = emails[0]
+        let email2 = emails[1]
+        expect(email1).to.equal('adel@adel.io')
+        expect(email2).to.equal('adel@adelio.io')
+        done()
+      })
+    })
+  })
+})
+
+describe('Emails in DB', function() {
+  it('should remove added fake email(s) from course', function (done) {
+    MongoHelper.RemoveAllEmailsFromCourse('FAKE-011-111')
+    MongoClient.connect(url, function (err,db) {
+      db.collection('emails').findOne({'FAKE-011-111': {$exists:true}}, (err,doc) => {
+        let emails = doc['FAKE-011-111']
+        expect(emails).eql([])
+        done()
+      })
+    })
+  })
+})
+
+
 describe('Courses in DB', function () {
   it('should remove fake course', function (done) {
     MongoHelper.RemoveCourse('FAKE-011-111');
