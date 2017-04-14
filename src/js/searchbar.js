@@ -11,6 +11,10 @@ function formatCourse (data) {
   }
 }
 
+function formatCourseSelection (data) {
+  return data.section_id;
+}
+
 $(document).ready(function () { 
   $(".courses").select2({
     ajax: {
@@ -36,6 +40,6 @@ $(document).ready(function () {
   escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
   minimumInputLength: 2,
   templateResult: formatCourse, // omitted for brevity, see the source of this page
-  templateSelection: formatCourse // omitted for brevity, see the source of this page
+  templateSelection: formatCourseSelection // omitted for brevity, see the source of this page
 });
 })
