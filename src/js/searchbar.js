@@ -1,12 +1,5 @@
-function formatCourse (repo) {
-
-  var markup = repo.section_id;
-
-  return markup;
-}
-
-function formatCourseSelection (repo) {
-  return repo.section_id;
+function formatCourse (course) {
+  return course.section_id;
 }
 
 $(document).ready(function () { 
@@ -34,6 +27,6 @@ $(document).ready(function () {
   escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
   minimumInputLength: 2,
   templateResult: formatCourse, // omitted for brevity, see the source of this page
-  templateSelection: formatCourseSelection // omitted for brevity, see the source of this page
+  templateSelection: formatCourse // omitted for brevity, see the source of this page
 });
 })
