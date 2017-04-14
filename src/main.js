@@ -35,6 +35,7 @@ app.get('/courses', (req, res) => {
 
 
 app.use(express.static(__dirname + '/js'))
+app.use(express.static(__dirname + '/css'))
 
 app.post('/submitted', (req, res) => {
   // Checks if course is open
