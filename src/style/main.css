@@ -17,6 +17,9 @@
   width: 100%;
   background-color: rgba(250, 250, 250, 0.95);
 
+  -webkit-box-shadow: 2px 2px 10px 1px rgba(0,0,0,0.2), -2px 2px 10px 1px rgba(0,0,0,0.1);
+  -moz-box-shadow: 2px 2px 10px 1px rgba(0,0,0,0.2), -2px 2px 10px 1px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 10px 1px rgba(0,0,0,0.2), -2px 2px 10px 1px rgba(0,0,0,0.1);
 }
 
 .tt-suggestion {
@@ -24,16 +27,14 @@
   padding: 10px;
   font-size: 12pt;
   line-height: normal;
+  color: rgb(90, 90, 90);
 }
 
 .tt-suggestion small {
   font-weight: 300;
 }
 
-.tt-cursor {
+.tt-cursor,  .tt-selectable:hover{
   background-color: rgba(177, 212, 239, 0.95);
-}
-
-/*.tt-dataset.tt-open {
-  background-color: gray;*/
+  color: black;
 }
