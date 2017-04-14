@@ -36,6 +36,23 @@ const removeDocument = (key, collection, callback) => {
   })
 }
 
+const findAllDocuments = (db, callback) => {
+  const collection = db.collection('emails')
+  collection.find().toArray((err, docs) => {
+    if (err) console.log(err)
+    callback(docs)
+  })
+}
+
+const removeAllFromArrayField = (key, db, callback) => {
+  const collection = db.collection('emails')
+  collection.update(
+    {[key]: {$exists: true}},
+    {$set: { [key] : [] }}
+  ).catch((e) => {
+    console.log(e)
+  });
+}
 // Relaces the value of the document with given key with the new val
 const replaceDocument = (key, val, collection, callback) => {
   collection.replaceOne(
@@ -91,10 +108,29 @@ const IncrementCourseCount = (course) => {
   })
 }
 
+const GetAllCoursesAndEmails = (callback) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    findAllDocuments(db, (docs) => { 
+      callback(docs)
+      db.close() 
+    })
+  })
+}
+
+const RemoveAllEmailsFromCourse = (course, callback) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    removeAllFromArrayField(course, db, () => { db.close() })
+  })
+}
+
 module.exports = {
   CreateCollections: CreateCollections,
   AddEmailToCourse: AddEmailToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
   RemoveCourse: RemoveCourse,
+  GetAllCoursesAndEmails: GetAllCoursesAndEmails,
+  RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse,
   IncrementCourseCount: IncrementCourseCount
 }
