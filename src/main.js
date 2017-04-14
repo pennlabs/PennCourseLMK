@@ -18,7 +18,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/courses', (req, res) => {
-  res.send(courses)
+  if (req.query.q) {
+    search_param = req.query.q.toUpperCase()
+    var newCourses = courses.filter( (course) => {
+      return course.section_id.substring(0,search_param.length) == search_param
+    })
+    res.json(newCourses)
+  } else {
+    res.json(courses)
+  }
 })
 
 app.use(express.static(__dirname + '/js'))
