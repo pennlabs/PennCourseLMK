@@ -20,7 +20,7 @@ def fetch_courses(term):
         instructors = [j['name'] for j in i['instructors']]
         meetings = i['meetings']
         meeting_days = [meeting['meeting_days'] + ' ' + meeting['start_time'] + ' - ' + meeting['end_time'] for meeting in meetings]
-        courses.append({'id': ids, 'section_id': section_id, 'course_title': course_title, 'instructors': instructors, 'meeting_days': meeting_days})
+        courses.append({'id': ids + 1, 'section_id': section_id, 'course_title': course_title, 'instructors': instructors, 'meeting_days': meeting_days})
     return courses
 
 with open('courses.json','w') as f:
