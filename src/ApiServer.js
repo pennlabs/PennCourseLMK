@@ -1,9 +1,9 @@
-var api = require("penn-sdk")
-var request = require('request')
+const api = require("penn-sdk")
+const request = require('request')
 Registrar = api.Registrar
 
-var API_USERNAME = process.env.PENN_SDK_USERNAME
-var API_PASSWORD = process.env.PENN_SDK_PASSWORD
+const API_USERNAME = process.env.PENN_SDK_USERNAME
+const API_PASSWORD = process.env.PENN_SDK_PASSWORD
 
 registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
@@ -38,7 +38,7 @@ const getAllCourseInfo = (dept, callback) => {
     }, (result) => {
       const c = result
       if (c) {
-        var b = []
+        let b = []
         c.forEach( (element) => {
           const name = element.section_id_normalized + ": " + element.section_title
           const status = !element.is_closed
@@ -60,7 +60,7 @@ const fetchDepartments = (callback) => {
     if(err) {
       console.log(err)
     }
-    var b = []
+    let b = []
     JSON.parse(body)['result']['values'].forEach( (element) => {
       b.push(element['id'])
     })

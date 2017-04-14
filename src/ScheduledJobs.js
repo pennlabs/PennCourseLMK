@@ -3,13 +3,13 @@ const MongoHelper = require('./MongoHelper.js')
 const Mailer = require('./Mailer.js')
 
 // -----------Helper functions -------------
-var FindEmailsAndCoursesWithOpenings = (callback) => {
+const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
-      var backendCourseName = Object.keys(doc)[1] 
+      let backendCourseName = Object.keys(doc)[1] 
       ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
         if (courseInfo.open) {
-          var courseEmails = doc[backendCourseName]
+          let courseEmails = doc[backendCourseName]
           callback(courseInfo.name, backendCourseName, courseEmails)
         }
       })
@@ -19,7 +19,7 @@ var FindEmailsAndCoursesWithOpenings = (callback) => {
 
 // -----------Public functions -------------
 
-var SendEmailsToOpenCourses = () => {
+const SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings( (courseName, backendCourseName, courseEmails) => {
     console.log(courseName)
     console.log(courseEmails)
