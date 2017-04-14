@@ -4,16 +4,35 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
   <body>
-    <div id="container">
-      <div id="title"> Hi, this is penn course lmk.</div>
+    <div class="container center-div">
+      <div class="row">
+        <div class="text-center">
+          <h1 class="title"> PennCourseLMK </h1>
+          <h4 class="subtitle"> Add courses that you want, and we'll let you know when they open up! </h4>
+        </div>
+      </div>
+
+      <form class="form-vertical" action="/submitted" method="POST">
+          <div id="bloodhound" class="form-group form-group-lg col-md-4 col-md-offset-4">
+              <input class="form-control typeahead" type="text"
+                placeholder="Add courses" name="course">
+          </div>
+
+          <div class="form-group form-group-lg col-md-4 col-md-offset-4">
+            <input class="form-control" type="email" placeholder="Email"
+              name="email">
+          </div>
+
+          <div class="col-md-4 col-md-offset-4">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+          </div>
+      </form>
     </div>
-    <form action="/submitted" method="POST">
-      <input type="text" placeholder="email" name="email">
-      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course"></div>
-      <button type="submit">Submit</button>
-    </form>
+
     <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/typeahead.bundle.js"></script>
     <script type="text/javascript" src="/searchbar.js"></script>

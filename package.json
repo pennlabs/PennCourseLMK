@@ -5,10 +5,10 @@
   "main": "",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "emailjs": "^1.0.8",
     "express": "^4.15.2",
     "mongodb": "^2.2.25",
-    "penn-sdk": "^0.2.1",
-    "emailjs": "^1.0.8"
+    "penn-sdk": "^0.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
