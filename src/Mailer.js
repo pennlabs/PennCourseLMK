@@ -1,8 +1,8 @@
-var email = require("emailjs")
+const email = require("emailjs")
 
 
 // ------ Helper functions ------
-var emailText = (course) => {
+const emailText = (course) => {
 	return `<h1>Penn Course LMK</h1>
 	Hello,<br><br>
 	The course you requested, ` + course + `, is now open! Hurry and sign up now!<br><br>
@@ -13,7 +13,7 @@ var emailText = (course) => {
 	<i>The Penn Course LMK team</i>`
 }
 
-var server = email.server.connect({
+const server = email.server.connect({
     user: "penncourselmk@gmail.com",
     password: process.env.LMK_PASSWORD,
     host: "smtp.gmail.com",
@@ -22,7 +22,7 @@ var server = email.server.connect({
 });
 
 // ------ Public functions ------
-var sendEmail = (course, email, callback) => {
+const sendEmail = (course, email, callback) => {
 	server.send({
 	    from: "Penn Course LMK <penncourselmk@gmail.com>",
 	    to: email,
@@ -31,7 +31,7 @@ var sendEmail = (course, email, callback) => {
 	}, function(err, message) { callback( err, message);});
 }
 
-var sendAllEmails = (course, emails, callback) => {
+const sendAllEmails = (course, emails, callback) => {
 	emails.forEach((element) => {sendEmail(course,element,callback)})
 }
 
