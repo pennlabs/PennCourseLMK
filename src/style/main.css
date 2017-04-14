@@ -1,3 +1,4 @@
+
 .title {
   color: rgb(150, 0, 0)
 }
@@ -10,4 +11,29 @@
   font-weight: 300;
   margin-left: 10vw;
   margin-right: 10vw;
+}
+
+.tt-menu {
+  width: 100%;
+  background-color: rgba(250, 250, 250, 0.95);
+
+}
+
+.tt-suggestion {
+  font-weight: 500;
+  padding: 10px;
+  font-size: 12pt;
+  line-height: normal;
+}
+
+.tt-suggestion small {
+  font-weight: 300;
+}
+
+.tt-cursor {
+  background-color: rgba(177, 212, 239, 0.95);
+}
+
+/*.tt-dataset.tt-open {
+  background-color: gray;*/
 }
