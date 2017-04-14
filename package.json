@@ -8,6 +8,7 @@
     "emailjs": "^1.0.8",
     "express": "^4.15.2",
     "mongodb": "^2.2.25",
+    "node-schedule": "^1.2.1",
     "penn-sdk": "^0.2.1"
   },
   "devDependencies": {
