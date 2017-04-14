@@ -4,6 +4,7 @@ const app = express()
 const path = require('path')
 const MongoHelper = require('./MongoHelper.js')
 const ApiServer = require('./ApiServer.js')
+const courses = require('../courses.json')
 const ScheduledJobs = require('./ScheduledJobs.js')
 var Schedule = require('node-schedule');
 
@@ -18,6 +19,10 @@ app.listen(3000, () => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/../index.html'))
+})
+
+app.get('/courses', (req, res) => {
+  res.json(courses)
 })
 
 app.use(express.static(__dirname + '/js'))
