@@ -1,5 +1,14 @@
-function formatCourse (course) {
-  return course.section_id;
+function formatCourse (data) {
+  if (data.instructors) {
+    var l = '';  
+    if (data.instructors.length != 0) {     
+      var l = data.instructors.join(', ')   
+    }
+    return '<p><i>' + data.section_id + '</i> - ' + data.course_title 
+           + '<br><small>' + l + '<br>' + data.meeting_days + '</small></p>';
+  } else {
+    return '<p>Loading...</p>';
+  }
 }
 
 $(document).ready(function () { 
