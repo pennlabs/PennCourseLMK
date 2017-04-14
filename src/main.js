@@ -2,9 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
-const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
-const courses = require('../courses.json')['result']
+const ApiServer = require('./ApiServer.js')
+const courses = require('../courses.json')
+const ScheduledJobs = require('./ScheduledJobs.js')
+var Schedule = require('node-schedule');
+
+Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -18,15 +22,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/courses', (req, res) => {
-  if (req.query.q) {
-    search_param = req.query.q.toUpperCase()
-    var newCourses = courses.filter( (course) => {
-      return course.section_id.substring(0,search_param.length) == search_param
-    })
-    res.json(newCourses)
-  } else {
-    res.json(courses)
-  }
+  res.json(courses)
 })
 
 app.use(express.static(__dirname + '/js'))

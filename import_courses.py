@@ -24,5 +24,5 @@ def fetch_courses(term):
     return courses
 
 with open('courses.json','w') as f:
-    json.dumps(fetch_courses(sys.argv[1]), f)
+    f.write(json.dumps(fetch_courses(sys.argv[1]), indent=4))
     f.close()
