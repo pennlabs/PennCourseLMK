@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  </head>
-  <body>
-    <div id="container">
-      <div id="title"> Hi, this is penn course lmk.</div>
-    </div>
-    <form action="/submitted" method="POST">
-      <input type="text" placeholder="email" name="email">
-      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course"></div>
-      <button type="submit">Submit</button>
-    </form>
-    <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="/searchbar.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link href="/style/select2.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="container">
+    <div id="title"> Hi, this is penn course lmk.</div>
+  </div>
+  <form action="/submitted" method="POST">
+    <input type="text" placeholder="email" name="email">
+    <select class="courses" multiple="multiple" style="width:1000px">
+      <option value='STAT 430 401'>STAT 430 401</option>
+    </select>
+    <button type="submit">Submit</button>
+  </form>
+  <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="/js/typeahead.bundle.js"></script>
+  <script type="text/javascript" src="/js/searchbar.js"></script>
+  <script type="text/javascript" src="/js/select2.full.min.js"></script>
+</body>
 </html>
