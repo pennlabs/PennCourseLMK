@@ -6,7 +6,7 @@ const Mailer = require('./Mailer.js')
 const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
-      let backendCourseName = Object.keys(doc)[1] 
+      let backendCourseName = doc.course
       ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
         if (courseInfo.open) {
           let courseEmails = doc[backendCourseName]

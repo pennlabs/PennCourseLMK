@@ -30,7 +30,7 @@ const findDocuments = (key, collection, callback) => {
 }
 
 const removeDocument = (key, collection, callback) => {
-  collection.deleteOne({[key] : {$exists: true}}, (err, result) => {
+  collection.deleteAll({[key] : {$exists: true}}, (err, result) => {
     if (err) console.log(err)
     callback(result)
   })
@@ -78,14 +78,30 @@ const AddEmailToCourse = (course, email) => {
   const doc = {[course]: email}
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    insertDocuments(doc, db.collection('emails'), () => { db.close() })
+    // insertDocuments(doc, db.collection('emails'), () => { db.close() })
+    db.collection('emails').updateOne({email: email, course: course, semester: '2017C'},
+      { email: email, course: course, semester: '2017C',
+        phone: {
+        phoneNumber: '',
+          carrier: ''
+        },
+        stopEmails: false,
+        sendOnlyOne: false,
+        signupSuccessful: null
+      },
+      {upsert: true})
   })
 }
 
-const GetEmailsFromCourse = (course) => {
+const GetEmailsFromCourse = (course, callback) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    findDocuments(course, db.collection('emails'), () => { db.close() })
+    // findDocuments(course, db.collection('emails'), () => { db.close() })
+    db.collection('emails').find({course: course}).toArray((err, docs) => {
+      let es = docs.map(x => x.email)
+      console.log(es)
+      callback && callback(es)
+    })
   })
 }
 
@@ -111,8 +127,20 @@ const IncrementCourseCount = (course) => {
 const GetAllCoursesAndEmails = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    findAllDocuments(db, (docs) => { 
-      callback(docs)
+    findAllDocuments(db, (docs) => {
+      let emails = {}
+      for (let i = 0; i < docs.length; i++) {
+        let d = docs[i]
+        if (d.course in emails) {
+          emails[d.course].push(d.email)
+        }
+      }
+      let r = []
+      let o = Object.keys(emails)
+      for (let i = 0; i < o.length; i++) {
+        r.push({course: o[i], emails: emails[o[i]]})
+      }
+      callback(r)
       db.close() 
     })
   })
