@@ -31,7 +31,7 @@ app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
-
+    console.log(info)
     if (testing /* !info.open */) {
       MongoHelper.AddEmailToCourse(req.body.course, req.body.email)
       MongoHelper.GetEmailsFromCourse(req.body.course) // Debugging

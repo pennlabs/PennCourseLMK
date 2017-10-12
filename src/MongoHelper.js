@@ -82,7 +82,7 @@ const AddEmailToCourse = (course, email) => {
     db.collection('emails').updateOne({email: email, course: course, semester: '2017C'},
       { email: email, course: course, semester: '2017C',
         phone: {
-        phoneNumber: '',
+          phoneNumber: '',
           carrier: ''
         },
         stopEmails: false,
@@ -132,7 +132,8 @@ const GetAllCoursesAndEmails = (callback) => {
       for (let i = 0; i < docs.length; i++) {
         let d = docs[i]
         if (d.course in emails) {
-          emails[d.course].push(d.email)
+          if (!d.stopEmails)
+            emails[d.course].push(d.email)
         }
       }
       let r = []
