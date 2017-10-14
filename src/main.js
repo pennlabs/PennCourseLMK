@@ -33,7 +33,11 @@ app.post('/submitted', (req, res) => {
     let testing = true
     console.log(info)
     if (testing /* !info.open */) {
-      MongoHelper.AddEmailToCourse(req.body.course, req.body.email)
+      var sendOnce = false;
+      if(req.body.notifications === undefined) {
+        sendOnce = true;
+      }
+      MongoHelper.AddEmailToCourse(req.body.course, req.body.email, sendOnce)
       MongoHelper.GetEmailsFromCourse(req.body.course) // Debugging
       MongoHelper.IncrementCourseCount(req.body.course)
     } else {
