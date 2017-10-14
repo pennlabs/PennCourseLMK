@@ -1,8 +1,9 @@
-var email = require("emailjs")
+const email = require("emailjs")
+const MongoHelper = require("./MongoHelper")
 
 
 // ------ Helper functions ------
-var emailText = (course) => {
+const emailText = (course) => {
 	return `<h1>Penn Course LMK</h1>
 	Hello,<br><br>
 	The course you requested, ` + course + `, is now open! Hurry and sign up now!<br><br>
@@ -13,7 +14,7 @@ var emailText = (course) => {
 	<i>The Penn Course LMK team</i>`
 }
 
-var server = email.server.connect({
+const server = email.server.connect({
     user: "penncourselmk@gmail.com",
     password: process.env.LMK_PASSWORD,
     host: "smtp.gmail.com",
@@ -22,7 +23,7 @@ var server = email.server.connect({
 });
 
 // ------ Public functions ------
-var sendEmail = (course, email, callback) => {
+const sendEmail = (course, email, callback) => {
 	console.log('LMK email sent to ' + email + ' for ' + course);
   if (process.env.MODE === 'prod') {
     server.send({
@@ -36,7 +37,7 @@ var sendEmail = (course, email, callback) => {
   }
 }
 
-var sendAllEmails = (course, emails, callback) => {
+const sendAllEmails = (course, emails, callback) => {
 	emails.forEach((element) => {sendEmail(course,element,callback)})
 }
 
