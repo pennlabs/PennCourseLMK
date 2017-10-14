@@ -106,10 +106,6 @@ const AddEmailToCourse = (course, email, perpetual) => {
     // insertDocuments(doc, db.collection('emails'), () => { db.close() })
     db.collection('emails').updateOne({email: email, course: course, semester: GetCurrentSemester()},
       { email: email, course: course, semester: GetCurrentSemester(),
-        phone: {
-          phoneNumber: '',
-          carrier: ''
-        },
         sendOnlyOne: perpetual,
         stopEmails: false,
         signupSuccessful: null
@@ -163,7 +159,7 @@ const updateEmailOptions = (course, email) => {
 
 const GetEmailsFromCoursesQuery = (courses) => {
   let emails = {}
-  for (let i = 0; i < docs.length; i++) {
+  for (let i = 0; i < courses.length; i++) {
     let d = courses[i]
     if (!(d.course in emails)) {
       emails[d.course] = []
@@ -181,7 +177,7 @@ const GetEmailsFromCoursesQuery = (courses) => {
 const collectEmailsToSend = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    db.collection('emails').find({stopEmails: false}, (docs, err) => {
+    db.collection('emails').find({stopEmails: false}, (err, docs) => {
       let r = GetEmailsFromCoursesQuery(docs)
       callback(r)
       db.close()
