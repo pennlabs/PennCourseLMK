@@ -8,6 +8,31 @@ if (PRODUCTION_MODE) {
 }
 
 // ------ Helper functions -------
+
+// Get current semester code
+const GetCurrentSemester = () => {
+  let d = new Date()
+  let year = d.getYear() + 1900
+  switch(d.getMonth()) {
+    case 9:
+    case 10:
+    case 11:
+    case 0:
+      return year+'C'
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return year+'A'
+    case 6:
+    case 7:
+    case 8:
+      return year+'B'
+  }
+
+}
+
 // Inserts doc into the set with its key if exists, adds doc if doesn't exist
 const insertDocuments = (doc, collection, callback) => {
   const bulk = collection.initializeUnorderedBulkOp()
@@ -79,8 +104,8 @@ const AddEmailToCourse = (course, email) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
     // insertDocuments(doc, db.collection('emails'), () => { db.close() })
-    db.collection('emails').updateOne({email: email, course: course, semester: '2017C'},
-      { email: email, course: course, semester: '2017C',
+    db.collection('emails').updateOne({email: email, course: course, semester: GetCurrentSemester()},
+      { email: email, course: course, semester: GetCurrentSemester(),
         phone: {
           phoneNumber: '',
           carrier: ''
@@ -116,6 +141,7 @@ const RemoveCourse = (course) => {
 const IncrementCourseCount = (course) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
+    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()})
     findDocuments(course, db.collection('analytics'), (docs) => {
       const val = docs[0] ? docs[0][course] + 1 : 1
       replaceDocument(course, val, db.collection('analytics'),
@@ -131,10 +157,11 @@ const GetAllCoursesAndEmails = (callback) => {
       let emails = {}
       for (let i = 0; i < docs.length; i++) {
         let d = docs[i]
-        if (d.course in emails) {
-          if (!d.stopEmails)
-            emails[d.course].push(d.email)
+        if (!(d.course in emails)) {
+          emails[d.course] = []
         }
+        if (!d.stopEmails)
+          emails[d.course].push(d.email)
       }
       let r = []
       let o = Object.keys(emails)
