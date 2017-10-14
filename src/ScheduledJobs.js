@@ -28,7 +28,6 @@ const SendEmailsToOpenCourses = () => {
         if (err) console.log(err)
       })
     })
-    MongoHelper.RemoveAllEmailsFromCourse(backendCourseName)
   })
 }
 
