@@ -34,17 +34,18 @@ app.post('/submitted', (req, res) => {
     let testing = true
     console.log(info)
     if (testing /* !info.open */) {
-      let sendOnce = false;
-      if (req.body.notifications === undefined) {
-        sendOnce = true;
+      //determine whether user signed up for perpetual notifications or not
+      let sendOnce = true;
+      if (req.body.notifications) {
+        sendOnce = false;
       }
       // check if email is present and, if so, add that course to email
-      if (req.body.email !== undefined) {
+      if (req.body.email) {
         MongoHelper.AddEmailToCourse(req.body.course, req.body.email, sendOnce);
       }
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
-      if (req.body.phonenumber !== undefined && req.body.carrier !== undefined) {
+      if (req.body.phonenumber && req.body.carrier) {
         let phoneEmail = Phone.createTextableEmail(req.body.phonenumber, req.body.carrier);
         MongoHelper.AddEmailToCourse(req.body.course, phoneEmail, sendOnce);
       }
