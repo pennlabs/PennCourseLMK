@@ -9,7 +9,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
       let backendCourseName = doc.course
       ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
         if (courseInfo.open) {
-          let courseEmails = doc[backendCourseName]
+          let courseEmails = doc.emails
           callback(courseInfo.name, backendCourseName, courseEmails)
         }
       })

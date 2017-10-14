@@ -23,12 +23,17 @@ var server = email.server.connect({
 
 // ------ Public functions ------
 var sendEmail = (course, email, callback) => {
-	server.send({
-	    from: "Penn Course LMK <penncourselmk@gmail.com>",
-	    to: email,
-	    subject: course + " is now open!",
-	    attachment: [ {data: emailText(course), alternative:true} ]
-	}, function(err, message) { callback( err, message);});
+	console.log('LMK email sent to ' + email + ' for ' + course);
+  if (process.env.MODE === 'prod') {
+    server.send({
+      from: "Penn Course LMK <penncourselmk@gmail.com>",
+      to: email,
+      subject: course + " is now open!",
+      attachment: [{data: emailText(course), alternative: true}]
+    }, function (err, message) {
+      callback(err, message);
+    });
+  }
 }
 
 var sendAllEmails = (course, emails, callback) => {
