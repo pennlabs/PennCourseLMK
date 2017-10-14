@@ -110,7 +110,8 @@ const AddEmailToCourse = (course, email, perpetual) => {
           phoneNumber: '',
           carrier: ''
         },
-        stopEmails: perpetual,
+        sendOnlyOne: perpetual,
+        stopEmails: false,
         signupSuccessful: null
       },
       {upsert: true})
