@@ -1,5 +1,6 @@
 const api = require("penn-sdk")
 const request = require('request')
+const getCurrentSemester = require("./MongoHelper").GetCurrentSemester
 Registrar = api.Registrar
 
 const API_USERNAME = process.env.PENN_SDK_USERNAME
@@ -14,7 +15,7 @@ const getCourseInfo = (course, callback) => {
   return (
     registrar.search({
       'course_id': course,
-      'term': '2017C'
+      'term': getCurrentSemester()
     }, (result) => {
       const c = result[0]
       if (c) {

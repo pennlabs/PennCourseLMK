@@ -100,10 +100,8 @@ const CreateCollections = () => {
 }
 
 const AddEmailToCourse = (course, email, perpetual) => {
-  const doc = {[course]: email}
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    // insertDocuments(doc, db.collection('emails'), () => { db.close() })
     db.collection('emails').updateOne({email: email, course: course, semester: GetCurrentSemester()},
       { email: email, course: course, semester: GetCurrentSemester(),
         sendOnlyOne: perpetual,
@@ -117,7 +115,6 @@ const AddEmailToCourse = (course, email, perpetual) => {
 const GetEmailsFromCourse = (course, callback) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    // findDocuments(course, db.collection('emails'), () => { db.close() })
     db.collection('emails').find({course: course}).toArray((err, docs) => {
       let es = docs.map(x => x.email)
       console.log(es)
@@ -177,7 +174,7 @@ const GetEmailsFromCoursesQuery = (courses) => {
 const collectEmailsToSend = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    db.collection('emails').find({stopEmails: false}, (err, docs) => {
+    db.collection('emails').find({stopEmails: false}).toArray((err, docs) => {
       let r = GetEmailsFromCoursesQuery(docs)
       callback(r)
       db.close()
@@ -200,5 +197,6 @@ module.exports = {
   GetAllCoursesAndEmails: collectEmailsToSend,
   RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse,
   IncrementCourseCount: IncrementCourseCount,
-  updateEmailOptions: updateEmailOptions
+  updateEmailOptions: updateEmailOptions,
+  GetCurrentSemester: GetCurrentSemester
 }
