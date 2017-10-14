@@ -99,7 +99,7 @@ const CreateCollections = () => {
   })
 }
 
-const AddEmailToCourse = (course, email) => {
+const AddEmailToCourse = (course, email, perpetual) => {
   const doc = {[course]: email}
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
@@ -110,8 +110,8 @@ const AddEmailToCourse = (course, email) => {
           phoneNumber: '',
           carrier: ''
         },
+        sendOnlyOne: perpetual,
         stopEmails: false,
-        sendOnlyOne: false,
         signupSuccessful: null
       },
       {upsert: true})
