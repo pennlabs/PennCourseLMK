@@ -7,12 +7,20 @@
   </head>
   <body>
     <div id="container">
-      <div id="title"> Penn Course LMK</div>
+      <div id="title">Penn Course LMK</div>
     </div>
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" name="email" value="dhaupt@seas.upenn.edu">
       <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course" value="CIS 160 001"></div>
-      <input type="checkbox" placeholder="notifications" name="notifications" value="perpetual"> Perpetual Notifications<br>
+      <input type="text" placeholder="phone number" name="phonenumber" value="3019067262">
+      <select name="carrier">
+        <option value="Verizon">Verizon</option>
+        <option value="AT&T">AT&amp;T</option>
+        <option value="T-Mobile">T-Mobile</option>
+        <option value="Sprint">Sprint</option>
+        <option value="USCellular">US Cellular</option>
+      </select><br>
+      <input type="checkbox" placeholder="notifications" name="notifications" value="perpetual">Perpetual Notifications<br>
       <button type="submit">Submit</button>
     </form>
     <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
