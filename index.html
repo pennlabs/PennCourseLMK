@@ -9,10 +9,19 @@
     <div id="container">
       <div id="title">Penn Course LMK</div>
     </div>
+    <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="/searchbar.js"></script>
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" name="email" value="dhaupt@seas.upenn.edu">
+      <script>
+      $('input[name="email"]').val(localStorage.getItem("lmkEmail"))
+      </script>
       <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" name="course" value="CIS 160 001"></div>
       <input type="text" placeholder="phone number" name="phonenumber" value="3019067262">
+      <script>
+      $('input[name="phonenumber"]').val(localStorage.getItem("lmkPhone"))
+      </script>
       <select name="carrier">
         <option value="Verizon">Verizon</option>
         <option value="AT&T">AT&amp;T</option>
@@ -20,11 +29,18 @@
         <option value="Sprint">Sprint</option>
         <option value="USCellular">US Cellular</option>
       </select><br>
+      <script>
+      $('select[name="carrier"]').val(localStorage.getItem("lmkCarrier"))
+      </script>
       <input type="checkbox" placeholder="notifications" name="notifications" value="perpetual">Perpetual Notifications<br>
       <button type="submit">Submit</button>
     </form>
-    <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="/searchbar.js"></script>
+    <script>
+    $('form').submit(function(e) {
+      localStorage.setItem("lmkEmail", e.target.email.value)
+      localStorage.setItem("lmkPhone", e.target.phonenumber.value)
+      localStorage.setItem("lmkCarrier", e.target.carrier.value)
+    })
+    </script>
   </body>
 </html>
