@@ -141,12 +141,23 @@ const RemoveCourse = (course) => {
 const IncrementCourseCount = (course) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()})
+    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()}, (doc, err) => {
+
+    })
     findDocuments(course, db.collection('analytics'), (docs) => {
       const val = docs[0] ? docs[0][course] + 1 : 1
       replaceDocument(course, val, db.collection('analytics'),
         () => { db.close() })
     })
+  })
+}
+
+const updateEmailOptions = (course, email) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    db.collection('emails').updateOne(
+      {course: course, email: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
+      {stopEmails: true})
   })
 }
 
@@ -157,24 +168,23 @@ const GetEmailsFromCoursesQuery = (courses) => {
     if (!(d.course in emails)) {
       emails[d.course] = []
     }
-    if (!d.stopEmails)
-      emails[d.course].push(d.email)
+    emails[d.course].push(d.email)
   }
   let r = []
   let o = Object.keys(emails)
   for (let i = 0; i < o.length; i++) {
     r.push({course: o[i], emails: emails[o[i]]})
   }
-  return r
+  return o.map(c => {return {course: c, emails: emails[c]}})
 }
 
-const GetAllCoursesAndEmails = (callback) => {
+const collectEmailsToSend = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    findAllDocuments(db, (docs) => {
+    db.collection('emails').find({stopEmails: false}, (docs, err) => {
       let r = GetEmailsFromCoursesQuery(docs)
       callback(r)
-      db.close() 
+      db.close()
     })
   })
 }
@@ -191,7 +201,8 @@ module.exports = {
   AddEmailToCourse: AddEmailToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
   RemoveCourse: RemoveCourse,
-  GetAllCoursesAndEmails: GetAllCoursesAndEmails,
+  GetAllCoursesAndEmails: collectEmailsToSend,
   RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse,
-  IncrementCourseCount: IncrementCourseCount
+  IncrementCourseCount: IncrementCourseCount,
+  updateEmailOptions: updateEmailOptions
 }

@@ -32,6 +32,7 @@ const sendEmail = (course, email, callback) => {
       subject: course + " is now open!",
       attachment: [{data: emailText(course), alternative: true}]
     }, function (err, message) {
+    	MongoHelper.updateEmailOptions(course, email)
       callback(err, message);
     });
   }
