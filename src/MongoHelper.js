@@ -150,24 +150,29 @@ const IncrementCourseCount = (course) => {
   })
 }
 
+const GetEmailsFromCoursesQuery = (courses) => {
+  let emails = {}
+  for (let i = 0; i < docs.length; i++) {
+    let d = courses[i]
+    if (!(d.course in emails)) {
+      emails[d.course] = []
+    }
+    if (!d.stopEmails)
+      emails[d.course].push(d.email)
+  }
+  let r = []
+  let o = Object.keys(emails)
+  for (let i = 0; i < o.length; i++) {
+    r.push({course: o[i], emails: emails[o[i]]})
+  }
+  return r
+}
+
 const GetAllCoursesAndEmails = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
     findAllDocuments(db, (docs) => {
-      let emails = {}
-      for (let i = 0; i < docs.length; i++) {
-        let d = docs[i]
-        if (!(d.course in emails)) {
-          emails[d.course] = []
-        }
-        if (!d.stopEmails)
-          emails[d.course].push(d.email)
-      }
-      let r = []
-      let o = Object.keys(emails)
-      for (let i = 0; i < o.length; i++) {
-        r.push({course: o[i], emails: emails[o[i]]})
-      }
+      let r = GetEmailsFromCoursesQuery(docs)
       callback(r)
       db.close() 
     })
