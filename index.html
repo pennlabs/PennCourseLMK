@@ -23,14 +23,13 @@
       <input type="checkbox" placeholder="notifications" id="notifications">Perpetual Notifications<br>
       <button type="submit">Submit</button>
     </form>
-    <script type="text/javascript" src="src/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="src/js/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="src/js/searchbar.js"></script>
+    <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="/searchbar.js"></script>
     <script>
       // on submission of form, update local storage to remember user's data
       $('form').submit(function(e) {
         localStorage.setItem('lmkEmail', e.target.email.value);
-        localStorage.setItem('lmkCourse', e.target.course.value);
         localStorage.setItem('lmkPhone', e.target.phonenumber.value);
         localStorage.setItem('lmkCarrier', e.target.carrier.value);
       });
@@ -47,7 +46,6 @@
       }
 
       // if URL contains '?', then pre-populate form from parsed URL
-      console.log(window.location.href.includes('?'));
       if (window.location.href.includes('?')) {
         const info = parseURL(window.location.href);
         $('#email').val(info.email);
@@ -59,9 +57,8 @@
       // otherwise, pre-populate form from local storage
       else {
         $('#email').val(localStorage.getItem('lmkEmail'));
-        $('#course').val(localStorage.getItem('lmkCourse'));
         $('#phonenumber').val(localStorage.getItem('lmkPhone'));
-        $('#carrier').val(localStorage.getItem('lmkCarrier'))
+        $('#carrier').val(localStorage.getItem('lmkCarrier'));
       }
     </script>
   </body>
