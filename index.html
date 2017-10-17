@@ -10,17 +10,17 @@
       <div id="title">Penn Course LMK</div>
     </div>
     <form action="/submitted" method="POST">
-      <input type="text" placeholder="email" id="email">
-      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" id="course"></div>
-      <input type="text" placeholder="phone number" id="phonenumber">
-      <select id="carrier">
+      <input type="text" placeholder="email" id="email" name="email">
+      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" id="course" name="course"></div>
+      <input type="text" placeholder="phone number" id="phonenumber" name="phonenumber">
+      <select id="carrier" name="carrier">
         <option value="Verizon">Verizon</option>
         <option value="AT&T">AT&amp;T</option>
         <option value="T-Mobile">T-Mobile</option>
         <option value="Sprint">Sprint</option>
         <option value="USCellular">US Cellular</option>
       </select><br>
-      <input type="checkbox" placeholder="notifications" id="notifications">Perpetual Notifications<br>
+      <input type="checkbox" placeholder="notifications" id="notifications" name="notifications">Perpetual Notifications<br>
       <button type="submit">Submit</button>
     </form>
     <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
