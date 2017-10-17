@@ -54,6 +54,6 @@ app.post('/submitted', (req, res) => {
     } else {
       console.log('course is already open!!!')
     }
+    res.redirect('/')
   })
-  res.redirect('/')
 })
