@@ -32,6 +32,7 @@
         localStorage.setItem('lmkEmail', e.target.email.value);
         localStorage.setItem('lmkPhone', e.target.phonenumber.value);
         localStorage.setItem('lmkCarrier', e.target.carrier.value);
+        localStorage.setItem('lmkNotifications', e.target.notifications.checked);
       });
 
       // parses form info out of link
@@ -45,20 +46,34 @@
         return formInfo;
       }
 
-      // if URL contains '?', then pre-populate form from parsed URL
+      // first, pre-populate form from local storage
+      $('#email').val(localStorage.getItem('lmkEmail'));
+      $('#phonenumber').val(localStorage.getItem('lmkPhone'));
+      $('#carrier').val(localStorage.getItem('lmkCarrier'));
+      if (localStorage.getItem('lmkNotifications')) {
+        $('#notifications').prop('checked', true);
+      }
+      $('#notifications').prop('checked', )
+      // if URL contains '?', then only pre-populate form from parsed URL element
+      // if it exists (in order to not overwrite local storage populated fields
+      // with undefined)
       if (window.location.href.includes('?')) {
         const info = parseURL(window.location.href);
-        $('#email').val(info.email);
-        $('#course').val(info.course);
-        $('#phonenumber').val(info.phonenumber);
-        $('#notifications').prop('checked', info.notifications);
-        $('#carrier').val(info.carrier);
-      }
-      // otherwise, pre-populate form from local storage
-      else {
-        $('#email').val(localStorage.getItem('lmkEmail'));
-        $('#phonenumber').val(localStorage.getItem('lmkPhone'));
-        $('#carrier').val(localStorage.getItem('lmkCarrier'));
+        if ('email' in info) {
+          $('#email').val(info.email);
+        }
+        if ('course' in info) {
+          $('#course').val(info.course);
+        }
+        if ('phonenumber' in info) {
+          $('#phonenumber').val(info.phonenumber);
+        }
+        if ('carrier' in info) {
+          $('#carrier').val(info.carrier);
+        }
+        if ('notifications' in info) {
+          $('#notifications').prop('checked', info.notifications);
+        }
       }
     </script>
   </body>
