@@ -39,8 +39,11 @@ app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
-    console.log(info)
+    // console.log(info)
     if (testing /* !info.open */) {
+      // IMPORTANT: Make sure that course code is normalized before inserting into database.
+      let course = info.normalizedCourse
+
       //determine whether user signed up for perpetual notifications or not
       let sendOnce = true;
       if (req.body.notifications) {
@@ -48,16 +51,16 @@ app.post('/submitted', (req, res) => {
       }
       // check if email is present and, if so, add that course to email
       if (req.body.email) {
-        MongoHelper.AddEmailToCourse(req.body.course, req.body.email, sendOnce);
+        MongoHelper.AddEmailToCourse(course, req.body.email, sendOnce);
       }
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
       if (req.body.phonenumber && req.body.carrier) {
         let phoneEmail = Phone.createTextableEmail(req.body.phonenumber, req.body.carrier);
-        MongoHelper.AddEmailToCourse(req.body.course, phoneEmail, sendOnce);
+        MongoHelper.AddEmailToCourse(course, phoneEmail, sendOnce);
       }
-      MongoHelper.GetEmailsFromCourse(req.body.course) // Debugging
-      MongoHelper.IncrementCourseCount(req.body.course)
+      MongoHelper.GetEmailsFromCourse(course) // Debugging
+      MongoHelper.IncrementCourseCount(course)
     } else {
       console.log('course is already open!!!')
     }
