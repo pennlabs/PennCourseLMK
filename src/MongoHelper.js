@@ -134,15 +134,39 @@ const RemoveCourse = (course) => {
 const IncrementCourseCount = (course) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()}, (doc, err) => {
-
-    })
-    findDocuments(course, db.collection('analytics'), (docs) => {
-      const val = docs[0] ? docs[0][course] + 1 : 1
-      replaceDocument(course, val, db.collection('analytics'),
-        () => { db.close() })
-    })
+    db.collection('analytics').updateMany(
+      {course: course, semester: GetCurrentSemester()},
+      {$inc: {count: 1}, $set: {course: course, semester: GetCurrentSemester()}},
+      {upsert: true})
   })
+}
+
+const findMaxCourseCount = () => {
+  return new Promise((resolve, reject) => {
+      MongoClient.connect(url, (err, db) => {
+        db.collection('analytics').aggregate(
+          [
+            {
+              $group: {
+                _id: "$semester",
+                maxRegistrations: {$max: "$count"}
+              }
+            }
+          ],
+          function(err, res) {
+            if (err) reject(err)
+
+            let r = {}
+            for (let i = 0; i < res.length; i++) {
+              let o = res[i]
+              r[o._id] = o.maxRegistrations
+            }
+            resolve(r)
+          }
+        )
+      })
+    }
+  )
 }
 
 const updateEmailOptions = (course, email) => {
@@ -198,5 +222,6 @@ module.exports = {
   RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse,
   IncrementCourseCount: IncrementCourseCount,
   updateEmailOptions: updateEmailOptions,
-  GetCurrentSemester: GetCurrentSemester
+  GetCurrentSemester: GetCurrentSemester,
+  findMaxCourseCount: findMaxCourseCount,
 }

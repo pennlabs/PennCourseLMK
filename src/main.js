@@ -28,6 +28,13 @@ app.get('/courses', (req, res) => {
 
 app.use(express.static(__dirname + '/js'))
 
+app.get('/stats', (req, res) => {
+  MongoHelper.findMaxCourseCount()
+    .then(stats => {
+      res.send(stats)
+    })
+})
+
 app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.getCourseInfo(req.body.course, (info) => {
