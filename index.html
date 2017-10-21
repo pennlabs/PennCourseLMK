@@ -39,7 +39,7 @@
       function parseURL(url) {
         let formInfo = {}
         const linkData = url.replace(/.*\?/, '').split('&');
-        for (let i = 0; i < linkData.length; i++ ) {
+        for (let i = 0; i < linkData.length; i++) {
             let split = linkData[i].split('=')
             formInfo[split[0]] = split[1]
         }
