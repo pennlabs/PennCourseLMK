@@ -26,6 +26,11 @@ app.get('/courses', (req, res) => {
   res.json(courses)
 })
 
+app.get('/updatecourses', (req, res) => {
+  ApiServer.insertCoursesToMongo()
+  res.send("OK!")
+})
+
 app.use(express.static(__dirname + '/js'))
 
 app.get('/stats', (req, res) => {

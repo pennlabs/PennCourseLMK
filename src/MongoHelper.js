@@ -178,6 +178,23 @@ const updateEmailOptions = (course, email) => {
   })
 }
 
+const updateCourseStats = (course, isOpen) => {
+  MongoClient.connect(url, (err, db) => {
+    const now = new Date()
+    db.collection('analytics').updateOne(
+      {course: course, semester: GetCurrentSemester()},
+      {lastUpdated: now, lastStatus: isOpen})
+  })
+}
+
+const getCourse = (course, cb) => {
+  MongoClient.connect(url, (err, db) => {
+    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()}, (err, doc) => {
+      cb && cb(doc)
+    })
+  })
+}
+
 const GetEmailsFromCoursesQuery = (courses) => {
   let emails = {}
   for (let i = 0; i < courses.length; i++) {
@@ -213,6 +230,33 @@ const RemoveAllEmailsFromCourse = (course, callback) => {
   })
 }
 
+const insertCourse = (course) => {
+  let c = {
+    section_id: course.section_id_normalized,
+    course_title: course.course_title,
+    instructors: course.instructors.map(x => x.name),
+    meetings_days: course.meetings.map(m => m.meetings_days + ' ' + m.start_time + ' - ' + m.end_time),
+    capacity: course.max_enrollment,
+    semester: GetCurrentSemester(),
+  }
+  MongoClient.connect(url, (err,db) => {
+    db.collection('courses').updateOne(
+      {section_id: c.section_id, semester: c.semester},
+      c,
+      {upsert: true}
+    )
+  })
+}
+
+const updateDept = (dept) => {
+  MongoClient.connect(url, (err,db) => {
+    db.collection('departments').updateOne(
+      {dept: dept, semester: GetCurrentSemester()},
+      {$set: {dept: dept, semester: GetCurrentSemester(), lastUpdated: new Date()}},
+      {upsert: true})
+  })
+}
+
 module.exports = {
   CreateCollections: CreateCollections,
   AddEmailToCourse: AddEmailToCourse,
@@ -224,4 +268,8 @@ module.exports = {
   updateEmailOptions: updateEmailOptions,
   GetCurrentSemester: GetCurrentSemester,
   findMaxCourseCount: findMaxCourseCount,
+  insertCourse : insertCourse,
+  updateDept: updateDept,
+  updateCourseStats: updateCourseStats,
+  getCourse: getCourse,
 }

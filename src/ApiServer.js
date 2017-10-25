@@ -1,6 +1,7 @@
 const api = require("penn-sdk")
 const request = require('request')
 const getCurrentSemester = require("./MongoHelper").GetCurrentSemester
+const MongoHelper = require('./MongoHelper')
 Registrar = api.Registrar
 
 const API_USERNAME = process.env.PENN_SDK_USERNAME
@@ -62,6 +63,27 @@ const getAllCourseInfo = (dept, callback) => {
   )
 }
 
+const insertCoursesToMongo = (callback) => {
+  // Get all departments
+  request(BASE_URL, (err, res, body) => {
+    let departments = JSON.parse(body).result.values
+    // console.log(departments)
+    // return;
+    for (let i = 0; i < departments.length; i++) {
+      let dept = departments[i];
+      // get all classes in that department for this semester
+      registrar.search({term: getCurrentSemester(), course_id: dept.id}, courses => {
+        for (let j = 0; j < courses.length; j++) {
+          console.log('updating courses for ' + dept.id)
+          if (courses[j])
+            MongoHelper.insertCourse(courses[j])
+        }
+        MongoHelper.updateDept(dept)
+      })
+    }
+  })
+}
+
 const fetchDepartments = (callback) => {
   request(BASE_URL, (err, res, body) => {
     if(err) {
@@ -89,5 +111,6 @@ module.exports = {
   getCourseInfo: getCourseInfo,
   getAllCourseInfo: getAllCourseInfo,
   fetchDepartments: fetchDepartments,
-  getAllCourses: getAllCourses
+  getAllCourses: getAllCourses,
+  insertCoursesToMongo: insertCoursesToMongo,
 }
