@@ -12,7 +12,7 @@
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" id="email" name="email">
       <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" id="course" name="course"></div>
-      <input type="text" placeholder="phone number" id="phonenumber" name="phonenumber">
+      <input type="text" placeholder="phone number" id="phone" name="phone">
       <select id="carrier" name="carrier">
         <option value="Verizon">Verizon</option>
         <option value="AT&T">AT&amp;T</option>
@@ -28,9 +28,9 @@
     <script type="text/javascript" src="/searchbar.js"></script>
     <script>
       // on submission of form, update local storage to remember user's data
-      $('form').submit(function(e) {
+      $('form').submit(e => {
         localStorage.setItem('lmkEmail', e.target.email.value)
-        localStorage.setItem('lmkPhone', e.target.phonenumber.value)
+        localStorage.setItem('lmkPhone', e.target.phone.value)
         localStorage.setItem('lmkCarrier', e.target.carrier.value)
         localStorage.setItem('lmkNotifications', e.target.notifications.checked)
       });
@@ -48,7 +48,7 @@
 
       // first, pre-populate form from local storage
       $('#email').val(localStorage.getItem('lmkEmail'))
-      $('#phonenumber').val(localStorage.getItem('lmkPhone'))
+      $('#phone').val(localStorage.getItem('lmkPhone'))
       $('#carrier').val(localStorage.getItem('lmkCarrier'))
       if (localStorage.getItem('lmkNotifications')) {
         $('#notifications').prop('checked', true)
@@ -64,8 +64,8 @@
         if ('course' in info) {
           $('#course').val(info.course)
         }
-        if ('phonenumber' in info) {
-          $('#phonenumber').val(info.phonenumber)
+        if ('phone' in info) {
+          $('#phone').val(info.phone)
         }
         if ('carrier' in info) {
           $('#carrier').val(info.carrier)
