@@ -40,6 +40,11 @@ app.get('/stats', (req, res) => {
     })
 })
 
+app.get('/deactivate', (req, res) => {
+  MongoHelper.deactivateEmail(req.query.console, req.query, email)
+  res.sendFile(path.join(__dirname + '/../index.html'))
+})
+
 app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.getCourseInfo(req.body.course, (info) => {
@@ -60,8 +65,8 @@ app.post('/submitted', (req, res) => {
       }
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
-      if (req.body.phonenumber && req.body.carrier) {
-        let phoneEmail = Phone.createTextableEmail(req.body.phonenumber, req.body.carrier);
+      if (req.body.phone && req.body.carrier) {
+        let phoneEmail = Phone.createTextableEmail(req.body.phone, req.body.carrier);
         MongoHelper.AddEmailToCourse(course, phoneEmail, sendOnce);
       }
       MongoHelper.GetEmailsFromCourse(course) // Debugging

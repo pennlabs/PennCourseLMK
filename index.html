@@ -12,7 +12,7 @@
     <form action="/submitted" method="POST">
       <input type="text" placeholder="email" id="email" name="email">
       <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" id="course" name="course"></div>
-      <input type="text" placeholder="phone number" id="phonenumber" name="phonenumber">
+      <input type="text" placeholder="phone number" id="phone" name="phone">
       <select id="carrier" name="carrier">
         <option value="Verizon">Verizon</option>
         <option value="AT&T">AT&amp;T</option>
@@ -28,37 +28,51 @@
     <script type="text/javascript" src="/searchbar.js"></script>
     <script>
       // on submission of form, update local storage to remember user's data
-      $('form').submit(function(e) {
-        localStorage.setItem('lmkEmail', e.target.email.value);
-        localStorage.setItem('lmkPhone', e.target.phonenumber.value);
-        localStorage.setItem('lmkCarrier', e.target.carrier.value);
+      $('form').submit(e => {
+        localStorage.setItem('lmkEmail', e.target.email.value)
+        localStorage.setItem('lmkPhone', e.target.phone.value)
+        localStorage.setItem('lmkCarrier', e.target.carrier.value)
+        localStorage.setItem('lmkNotifications', e.target.notifications.checked)
       });
 
       // parses form info out of link
       function parseURL(url) {
-        let formInfo = {};
+        let formInfo = {}
         const linkData = url.replace(/.*\?/, '').split('&');
-        for (let i = 0; i < linkData.length; i++ ) {
-            let split = linkData[i].split('=');
-            formInfo[split[0]] = split[1];
+        for (let i = 0; i < linkData.length; i++) {
+            let split = linkData[i].split('=')
+            formInfo[split[0]] = split[1]
         }
-        return formInfo;
+        return formInfo
       }
 
-      // if URL contains '?', then pre-populate form from parsed URL
-      if (window.location.href.includes('?')) {
-        const info = parseURL(window.location.href);
-        $('#email').val(info.email);
-        $('#course').val(info.course);
-        $('#phonenumber').val(info.phonenumber);
-        $('#notifications').prop('checked', info.notifications);
-        $('#carrier').val(info.carrier);
+      // first, pre-populate form from local storage
+      $('#email').val(localStorage.getItem('lmkEmail'))
+      $('#phone').val(localStorage.getItem('lmkPhone'))
+      $('#carrier').val(localStorage.getItem('lmkCarrier'))
+      if (localStorage.getItem('lmkNotifications') === 'true') {
+        $('#notifications').prop('checked', true)
       }
-      // otherwise, pre-populate form from local storage
-      else {
-        $('#email').val(localStorage.getItem('lmkEmail'));
-        $('#phonenumber').val(localStorage.getItem('lmkPhone'));
-        $('#carrier').val(localStorage.getItem('lmkCarrier'));
+      // if URL contains '?', then only pre-populate form from parsed URL element
+      // if it exists (in order to not overwrite local storage populated fields
+      // with undefined)
+      if (window.location.href.includes('?')) {
+        const info = parseURL(window.location.href)
+        if ('email' in info) {
+          $('#email').val(info.email)
+        }
+        if ('course' in info) {
+          $('#course').val(info.course)
+        }
+        if ('phone' in info) {
+          $('#phone').val(info.phonenumber)
+        }
+        if ('carrier' in info) {
+          $('#carrier').val(info.carrier)
+        }
+        if ('notifications' in info) {
+          $('#notifications').prop('checked', info.notifications)
+        }
       }
     </script>
   </body>

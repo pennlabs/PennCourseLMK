@@ -194,6 +194,14 @@ const getCourse = (course, cb) => {
     })
   })
 }
+const deactivateEmail = (course, email) => {
+  MongoClient.connect(url, (err,db) => {
+    if (err) console.log(err)
+    db.collection('emails').updateOne(
+      {course: course, email: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
+      {stopEmails: true})
+  })
+}
 
 const GetEmailsFromCoursesQuery = (courses) => {
   let emails = {}
