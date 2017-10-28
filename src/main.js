@@ -35,6 +35,11 @@ app.get('/stats', (req, res) => {
     })
 })
 
+app.get('/deactivate', (req, res) => {
+  MongoHelper.deactivateEmail(req.query.console, req.query, email)
+  res.sendFile(path.join(__dirname + '/../index.html'))
+})
+
 app.post('/submitted', (req, res) => {
   // Checks if course is open
   ApiServer.getCourseInfo(req.body.course, (info) => {
