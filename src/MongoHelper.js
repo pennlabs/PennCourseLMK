@@ -202,7 +202,7 @@ const GetEmailsFromCoursesQuery = (courses) => {
     if (!(d.course in emails)) {
       emails[d.course] = []
     }
-    emails[d.course].push(d.email)
+    emails[d.course].push(d.email) // TODO: Change this to work with arrays
   }
   let r = []
   let o = Object.keys(emails)
