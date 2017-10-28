@@ -100,11 +100,11 @@ const CreateCollections = () => {
   })
 }
 
-const AddEmailToCourse = (course, email, perpetual) => {
+const AddEmailsToCourse = (course, emails, perpetual) => {
   MongoClient.connect(url, (err, db) => {
     if (err) console.log(err)
-    db.collection('emails').updateOne({email: email, course: course, semester: GetCurrentSemester()},
-      { email: email, course: course, semester: GetCurrentSemester(),
+    db.collection('emails').updateOne({emails: emails, course: course, semester: GetCurrentSemester()},
+      { emails: emails, course: course, semester: GetCurrentSemester(),
         sendOnlyOne: perpetual,
         stopEmails: false,
         signupSuccessful: null
@@ -174,7 +174,7 @@ const updateEmailOptions = (course, email) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
     db.collection('emails').updateOne(
-      {course: course, email: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
+      {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
       {stopEmails: true})
   })
 }
@@ -211,7 +211,7 @@ const GetEmailsFromCoursesQuery = (docs) => {
     if (!(doc.course in emails)) {
       emails[doc.course] = []
     }
-    emails[d.course].push(d.email) // TODO: Change this to work with arrays
+    emails[doc.course].push(doc.emails) // TODO: Change this to work with arrays
   }
   let o = Object.keys(emails)
   return o.map(c => {return {course: c, emails: emails[c]}})
@@ -265,7 +265,7 @@ const updateDept = (dept) => {
 
 module.exports = {
   CreateCollections: CreateCollections,
-  AddEmailToCourse: AddEmailToCourse,
+  AddEmailsToCourse: AddEmailsToCourse,
   GetEmailsFromCourse: GetEmailsFromCourse,
   RemoveCourse: RemoveCourse,
   GetAllCoursesAndEmails: collectEmailsToSend,

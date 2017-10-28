@@ -54,18 +54,23 @@ app.post('/submitted', (req, res) => {
       if (req.body.notifications) {
         sendOnce = false;
       }
+
+      let emails = []
       // check if email is present and, if so, add that course to email
       if (req.body.email) {
-        MongoHelper.AddEmailToCourse(course, req.body.email, sendOnce);
+        emails.push(req.body.email)
       }
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
       if (req.body.phonenumber && req.body.carrier) {
         let phoneEmail = Phone.createTextableEmail(req.body.phonenumber, req.body.carrier);
-        MongoHelper.AddEmailToCourse(course, phoneEmail, sendOnce);
+        emails.push(phoneEmail)
       }
-      MongoHelper.GetEmailsFromCourse(course) // Debugging
-      MongoHelper.IncrementCourseCount(course)
+      if (emails.length > 0) {
+        MongoHelper.AddEmailsToCourse(course, emails, sendOnce)
+        // MongoHelper.GetEmailsFromCourse(course) // Debugging
+        MongoHelper.IncrementCourseCount(course)
+      }
     } else {
       console.log('course is already open!!!')
     }
