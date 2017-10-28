@@ -233,4 +233,5 @@ module.exports = {
   updateEmailOptions: updateEmailOptions,
   GetCurrentSemester: GetCurrentSemester,
   findMaxCourseCount: findMaxCourseCount,
+  deactivateEmail: deactivateEmail,
 }
