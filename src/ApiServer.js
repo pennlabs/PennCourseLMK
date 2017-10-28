@@ -19,11 +19,17 @@ const getCourseInfo = (course, callback) => {
     }, (result) => {
       const c = result[0]
       if (c) {
+        // console.log(c)
         const name = c.section_id_normalized + ": " + c.section_title
         const status = !c.is_closed
         const number = c.course_number
         const section = c.section_number
-        callback({'open': status, 'name': name})
+
+        const crosslistings = c.crosslistings
+        // max_enrollment vs max_enrollment_crosslist
+        const max_enrollment = c.max_enrollment
+
+        callback({'open': status, 'normalizedCourse': c.section_id_normalized, 'name': name, 'max_enrollment': max_enrollment})
       } else {
         callback(null, 'This course doesnt exist!')
       }
