@@ -30,7 +30,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
 
 const SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings( (courseName, backendCourseName, courseEmails) => {
-    courseEmails.forEach((email) => {
+    courseEmails.forEach((emails) => {
 
       Mailer.sendEmail(courseName, email, (err, message) => {
         if (err) console.log(err)
