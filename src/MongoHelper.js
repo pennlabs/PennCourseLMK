@@ -7,6 +7,7 @@ if (PRODUCTION_MODE) {
   '@ds155080.mlab.com:55080/penncourselmk'
 }
 
+// TODO: Connection Pooling
 // ------ Helper functions -------
 
 // Get current semester code
@@ -195,27 +196,32 @@ const getCourse = (course, cb) => {
   })
 }
 
-const GetEmailsFromCoursesQuery = (courses) => {
+const GetEmailsFromCoursesQuery = (docs) => {
+  /**
+   * Collect emails from MongoDB documents into the proper form to send-out in emails.
+   * We check if the course is open, and then passes on the list of all the associated
+   * emails to the mailer
+   *
+   * @type {{course: <string>, emails: <string list list>}}
+   */
   let emails = {}
-  for (let i = 0; i < courses.length; i++) {
-    let d = courses[i]
-    if (!(d.course in emails)) {
-      emails[d.course] = []
+  // get all the emails associated with a course
+  for (let i = 0; i < docs.length; i++) {
+    let doc = docs[i]
+    if (!(doc.course in emails)) {
+      emails[doc.course] = []
     }
     emails[d.course].push(d.email) // TODO: Change this to work with arrays
   }
-  let r = []
   let o = Object.keys(emails)
-  for (let i = 0; i < o.length; i++) {
-    r.push({course: o[i], emails: emails[o[i]]})
-  }
   return o.map(c => {return {course: c, emails: emails[c]}})
 }
 
 const collectEmailsToSend = (callback) => {
   MongoClient.connect(url, (err,db) => {
     if (err) console.log(err)
-    db.collection('emails').find({stopEmails: false}).toArray((err, docs) => {
+    // Only query emails for the current semester where they should still be sent emails.
+    db.collection('emails').find({stopEmails: false, semester: GetCurrentSemester()}).toArray((err, docs) => {
       let r = GetEmailsFromCoursesQuery(docs)
       callback(r)
       db.close()
