@@ -55,8 +55,8 @@ app.post('/submitted', (req, res) => {
       }
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
-      if (req.body.phonenumber && req.body.carrier) {
-        let phoneEmail = Phone.createTextableEmail(req.body.phonenumber, req.body.carrier);
+      if (req.body.phone && req.body.carrier) {
+        let phoneEmail = Phone.createTextableEmail(req.body.phone, req.body.carrier);
         MongoHelper.AddEmailToCourse(course, phoneEmail, sendOnce);
       }
       MongoHelper.GetEmailsFromCourse(course) // Debugging

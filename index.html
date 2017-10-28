@@ -50,7 +50,7 @@
       $('#email').val(localStorage.getItem('lmkEmail'))
       $('#phone').val(localStorage.getItem('lmkPhone'))
       $('#carrier').val(localStorage.getItem('lmkCarrier'))
-      if (localStorage.getItem('lmkNotifications')) {
+      if (localStorage.getItem('lmkNotifications') === 'true') {
         $('#notifications').prop('checked', true)
       }
       // if URL contains '?', then only pre-populate form from parsed URL element
@@ -65,7 +65,7 @@
           $('#course').val(info.course)
         }
         if ('phone' in info) {
-          $('#phone').val(info.phone)
+          $('#phone').val(info.phonenumber)
         }
         if ('carrier' in info) {
           $('#carrier').val(info.carrier)
