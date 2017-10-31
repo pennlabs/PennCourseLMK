@@ -12,10 +12,10 @@ const createTextableEmail = (number, carrier) => {
 		case "Verizon":
 			carrierEmail = "@vtext.com";
 			break;
-		case "AT&T":
+		case "ATT":
 			carrierEmail = "@txt.att.net";
 			break;
-		case "T-Mobile":
+		case "TMobile":
 			carrierEmail = "@tmomail.net";
 			break;
 		case "Sprint":
@@ -30,6 +30,49 @@ const createTextableEmail = (number, carrier) => {
 	return cleanNumber + carrierEmail;
 }
 
+// parses the original phone number and carrier from phone associated email
+const parsePhoneEmail = (phoneEmail) => {
+  // split the number from the carrier
+  let split = phoneEmail.split('@')
+  let number = split[0]
+  // find appropriate carrier based on email
+  let carrier = ''
+  switch(split[1]) {
+  	case 'vtext.com':
+  		carrier = 'Verizon'
+  		break
+  	case 'txt.att.net':
+  		carrier = 'ATT'
+  		break
+  	case 'tmomail.net':
+  		carrier = 'TMobile'
+  		break
+  	case 'messaging.sprintpcs.com':
+  		carrier = 'Sprint'
+  		break
+  	case 'email.uscc.net':
+  		carrier = 'USCellular'
+  		break
+  	default:
+  		throw "Error: carrier not found"
+  }
+  return [number, carrier]
+}
+
+// checks if a given email is a phone associated email
+const isPhoneEmail = (email) => {
+	let split = email.split('@')
+	let carrier = split[1]
+	if (carrier === 'vtext.com' || carrier === 'txt.att.net' ||
+		carrier === 'tmomail.net' || carrier === 'messaging.sprintpcs.com' ||
+		carrier === 'email.uscc.net') {
+		return true
+	}
+	return false
+}
+
 module.exports = {
 	createTextableEmail: createTextableEmail,
+	parsePhoneEmail: parsePhoneEmail,
+	isPhoneEmail: isPhoneEmail,
 }
