@@ -13,9 +13,13 @@ Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.listen(3000, () => {
-  console.log('listening on 3000')
-  MongoHelper.CreateCollections()
+MongoHelper.connectDB((err, db) => {
+  if (!err) {
+    app.listen(3000, () => {
+      console.log('listening on 3000')
+      MongoHelper.CreateCollections()
+    })
+  }
 })
 
 app.get('/', (req, res) => {

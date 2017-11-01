@@ -34,6 +34,17 @@ const GetCurrentSemester = () => {
 
 }
 
+let db = null
+
+const connectDB = (callback) => {
+  MongoClient.connect(url, (err, db1) => {
+    if (err) callback(err, db1)
+
+    db = db1
+    callback(err, db1)
+  })
+}
+
 // Inserts doc into the set with its key if exists, adds doc if doesn't exist
 const insertDocuments = (doc, collection, callback) => {
   const bulk = collection.initializeUnorderedBulkOp()
@@ -93,115 +104,88 @@ const replaceDocument = (key, val, collection, callback) => {
 
 // ------ Public functions --------
 const CreateCollections = () => {
-  MongoClient.connect(url, (err, db) => {
-    if (err) console.log(err)
-    db.createCollection('emails')
-    db.createCollection('analytics')
-  })
+  db.createCollection('emails')
+  db.createCollection('analytics')
 }
 
 const AddEmailsToCourse = (course, emails, perpetual) => {
-  MongoClient.connect(url, (err, db) => {
-    if (err) console.log(err)
-    db.collection('emails').updateOne({emails: emails, course: course, semester: GetCurrentSemester()},
-      { emails: emails, course: course, semester: GetCurrentSemester(),
-        sendOnlyOne: perpetual,
-        stopEmails: false,
-        signupSuccessful: null
-      },
-      {upsert: true})
-  })
+  db.collection('emails').updateOne({emails: emails, course: course, semester: GetCurrentSemester()},
+    { emails: emails, course: course, semester: GetCurrentSemester(),
+      sendOnlyOne: perpetual,
+      stopEmails: false,
+      signupSuccessful: null
+    },
+    {upsert: true})
 }
 
 const GetEmailsFromCourse = (course, callback) => {
-  MongoClient.connect(url, (err, db) => {
-    if (err) console.log(err)
-    db.collection('emails').find({course: course}).toArray((err, docs) => {
-      let es = docs.map(x => x.email)
-      console.log(es)
-      callback && callback(es)
-    })
+  db.collection('emails').find({course: course}).toArray((err, docs) => {
+    let es = docs.map(x => x.email)
+    console.log(es)
+    callback && callback(es)
   })
 }
 
 const RemoveCourse = (course) => {
-  MongoClient.connect(url, (err, db) => {
-    if (err) console.log(err)
-    removeDocument(course, db.collection('emails'), () => { db.close() })
-  })
+  removeDocument(course, db.collection('emails'), () => { db.close() })
 }
 
 // Increments the number of times a course has been requested
 const IncrementCourseCount = (course) => {
-  MongoClient.connect(url, (err, db) => {
-    if (err) console.log(err)
-    db.collection('analytics').updateMany(
-      {course: course, semester: GetCurrentSemester()},
-      {$inc: {count: 1}, $set: {course: course, semester: GetCurrentSemester()}},
-      {upsert: true})
-  })
+  db.collection('analytics').updateMany(
+    {course: course, semester: GetCurrentSemester()},
+    {$inc: {count: 1}, $set: {course: course, semester: GetCurrentSemester()}},
+    {upsert: true})
 }
 
 const findMaxCourseCount = () => {
   return new Promise((resolve, reject) => {
-      MongoClient.connect(url, (err, db) => {
-        db.collection('analytics').aggregate(
-          [
-            {
-              $group: {
-                _id: "$semester",
-                maxRegistrations: {$max: "$count"}
-              }
-            }
-          ],
-          function(err, res) {
-            if (err) reject(err)
-
-            let r = {}
-            for (let i = 0; i < res.length; i++) {
-              let o = res[i]
-              r[o._id] = o.maxRegistrations
-            }
-            resolve(r)
+    db.collection('analytics').aggregate(
+      [
+        {
+          $group: {
+            _id: "$semester",
+            maxRegistrations: {$max: "$count"}
           }
-        )
-      })
+        }
+      ],
+      function(err, res) {
+        if (err) reject(err)
+
+        let r = {}
+        for (let i = 0; i < res.length; i++) {
+          let o = res[i]
+          r[o._id] = o.maxRegistrations
+        }
+        resolve(r)
+      }
+    )
     }
   )
 }
 
 const updateEmailOptions = (course, email) => {
-  MongoClient.connect(url, (err,db) => {
-    if (err) console.log(err)
-    db.collection('emails').updateOne(
-      {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
-      {stopEmails: true})
-  })
+  db.collection('emails').updateOne(
+    {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
+    {stopEmails: true})
 }
 
 const updateCourseStats = (course, isOpen) => {
-  MongoClient.connect(url, (err, db) => {
-    const now = new Date()
-    db.collection('analytics').updateOne(
-      {course: course, semester: GetCurrentSemester()},
-      {lastUpdated: now, lastStatus: isOpen})
-  })
+  const now = new Date()
+  db.collection('analytics').updateOne(
+    {course: course, semester: GetCurrentSemester()},
+    {lastUpdated: now, lastStatus: isOpen})
 }
 
 const getCourse = (course, cb) => {
-  MongoClient.connect(url, (err, db) => {
-    db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()}, (err, doc) => {
-      cb && cb(doc)
-    })
+  db.collection('analytics').findOne({course: course, semester: GetCurrentSemester()}, (err, doc) => {
+    cb && cb(doc)
   })
 }
 const deactivateEmail = (course, email) => {
-  MongoClient.connect(url, (err,db) => {
-    if (err) console.log(err)
-    db.collection('emails').updateOne(
-      {course: course, email: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
-      {stopEmails: true})
-  })
+  db.collection('emails').updateOne(
+    {course: course, email: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
+    {stopEmails: true})
 }
 
 const GetEmailsFromCoursesQuery = (docs) => {
@@ -226,22 +210,16 @@ const GetEmailsFromCoursesQuery = (docs) => {
 }
 
 const collectEmailsToSend = (callback) => {
-  MongoClient.connect(url, (err,db) => {
-    if (err) console.log(err)
-    // Only query emails for the current semester where they should still be sent emails.
-    db.collection('emails').find({stopEmails: false, semester: GetCurrentSemester()}).toArray((err, docs) => {
-      let r = GetEmailsFromCoursesQuery(docs)
-      callback(r)
-      db.close()
-    })
+  // Only query emails for the current semester where they should still be sent emails.
+  db.collection('emails').find({stopEmails: false, semester: GetCurrentSemester()}).toArray((err, docs) => {
+    let r = GetEmailsFromCoursesQuery(docs)
+    callback(r)
+    db.close()
   })
 }
 
 const RemoveAllEmailsFromCourse = (course, callback) => {
-  MongoClient.connect(url, (err,db) => {
-    if (err) console.log(err)
-    removeAllFromArrayField(course, db, () => { db.close() })
-  })
+  removeAllFromArrayField(course, db, () => { db.close() })
 }
 
 const insertCourse = (course) => {
@@ -253,22 +231,18 @@ const insertCourse = (course) => {
     capacity: course.max_enrollment,
     semester: GetCurrentSemester(),
   }
-  MongoClient.connect(url, (err,db) => {
-    db.collection('courses').updateOne(
-      {section_id: c.section_id, semester: c.semester},
-      c,
-      {upsert: true}
-    )
-  })
+  db.collection('courses').updateOne(
+    {section_id: c.section_id, semester: c.semester},
+    c,
+    {upsert: true}
+  )
 }
 
 const updateDept = (dept) => {
-  MongoClient.connect(url, (err,db) => {
-    db.collection('departments').updateOne(
-      {dept: dept, semester: GetCurrentSemester()},
-      {$set: {dept: dept, semester: GetCurrentSemester(), lastUpdated: new Date()}},
-      {upsert: true})
-  })
+  db.collection('departments').updateOne(
+    {dept: dept, semester: GetCurrentSemester()},
+    {$set: {dept: dept, semester: GetCurrentSemester(), lastUpdated: new Date()}},
+    {upsert: true})
 }
 
 module.exports = {
@@ -286,4 +260,5 @@ module.exports = {
   updateDept: updateDept,
   updateCourseStats: updateCourseStats,
   getCourse: getCourse,
+  connectDB: connectDB,
 }
