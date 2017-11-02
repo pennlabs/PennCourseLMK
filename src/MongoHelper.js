@@ -127,7 +127,7 @@ const GetEmailsFromCourse = (course, callback) => {
 }
 
 const RemoveCourse = (course) => {
-  removeDocument(course, db.collection('emails'), () => { db.close() })
+  removeDocument(course, db.collection('emails'), () => {})
 }
 
 // Increments the number of times a course has been requested
@@ -212,14 +212,16 @@ const GetEmailsFromCoursesQuery = (docs) => {
 const collectEmailsToSend = (callback) => {
   // Only query emails for the current semester where they should still be sent emails.
   db.collection('emails').find({stopEmails: false, semester: GetCurrentSemester()}).toArray((err, docs) => {
-    let r = GetEmailsFromCoursesQuery(docs)
-    callback(r)
-    db.close()
+    if (err) console.log (err)
+    else {
+      let r = GetEmailsFromCoursesQuery(docs)
+      callback(r)
+    }
   })
 }
 
 const RemoveAllEmailsFromCourse = (course, callback) => {
-  removeAllFromArrayField(course, db, () => { db.close() })
+  removeAllFromArrayField(course, db, () => { })
 }
 
 const insertCourse = (course) => {

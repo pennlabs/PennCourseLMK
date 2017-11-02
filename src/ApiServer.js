@@ -64,22 +64,14 @@ const getAllCourseInfo = (dept, callback) => {
 }
 
 const insertCoursesToMongo = (callback) => {
-  // Get all departments
-  request(BASE_URL, (err, res, body) => {
-    let departments = JSON.parse(body).result.values
-    // console.log(departments)
-    // return;
-    for (let i = 0; i < departments.length; i++) {
-      let dept = departments[i];
-      // get all classes in that department for this semester
-      registrar.search({term: getCurrentSemester(), course_id: dept.id}, courses => {
-        for (let j = 0; j < courses.length; j++) {
-          console.log('updating courses for ' + dept.id)
-          if (courses[j])
-            MongoHelper.insertCourse(courses[j])
-        }
-        MongoHelper.updateDept(dept)
-      })
+  console.log('starting course search...')
+  // Search all courses for the current semester
+  registrar.search({term: getCurrentSemester(), course_id: ''}, courses => {
+    // console.log(courses);
+    console.log('courses query complete!')
+    for (let j = 0; j < courses.length; j++) {
+      if (courses[j])
+        MongoHelper.insertCourse(courses[j])
     }
   })
 }
