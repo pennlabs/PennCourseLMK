@@ -99,15 +99,6 @@ const getAllCourses = (callback) => {
   callback(courses)
 }
 
-const getCourseScore = (signups, capacity) => {
-  let ratio = (signups * 1.0)/capacity
-  let score = ratio/0.025;
-  let finalScore = ratio | 0;
-  if(finalScore > 10) {
-    finalScore = 10;
-  }
-  return finalScore;
-}
 
 module.exports = {
   getCourseInfo: getCourseInfo,

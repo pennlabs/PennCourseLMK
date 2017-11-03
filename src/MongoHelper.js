@@ -45,6 +45,8 @@ const connectDB = (callback) => {
   })
 }
 
+
+
 // Inserts doc into the set with its key if exists, adds doc if doesn't exist
 const insertDocuments = (doc, collection, callback) => {
   const bulk = collection.initializeUnorderedBulkOp()
@@ -174,7 +176,7 @@ const updateCourseStats = (course, isOpen) => {
   const now = new Date()
   db.collection('analytics').updateOne(
     {course: course, semester: GetCurrentSemester()},
-    {lastUpdated: now, lastStatus: isOpen})
+    {$set: {lastUpdated: now, lastStatus: isOpen}})
 }
 
 const getCourse = (course, cb) => {
@@ -227,9 +229,10 @@ const RemoveAllEmailsFromCourse = (course, callback) => {
 const insertCourse = (course) => {
   let c = {
     section_id: course.section_id_normalized,
+    course: course.section_id_normalized,
     course_title: course.course_title,
     instructors: course.instructors.map(x => x.name),
-    meetings_days: course.meetings.map(m => m.meetings_days + ' ' + m.start_time + ' - ' + m.end_time),
+    meetings_days: course.meetings.map(m => m.meeting_days + ' ' + m.start_time + ' - ' + m.end_time),
     capacity: course.max_enrollment,
     semester: GetCurrentSemester(),
   }
@@ -238,6 +241,42 @@ const insertCourse = (course) => {
     c,
     {upsert: true}
   )
+}
+
+const getCourseScore = (signups, capacity) => {
+  let ratio = (signups * 1.0)/capacity
+  let score = ratio/0.025;
+  let finalScore = score | 0;
+  if(finalScore > 10) {
+    finalScore = 10;
+  }
+  return finalScore;
+}
+
+const getCourses = (section, callback) => {
+  let q = {semester: GetCurrentSemester()}
+  if (section) q.section_id = new RegExp('^'+section)
+  db.collection('courses').aggregate([
+    {
+      $match: q
+    },
+    {
+      $lookup: {
+        from: 'analytics',
+        localField: 'course',
+        foreignField: 'course',
+        as: 'analytics'
+      }
+    }
+  ], (err, res) => {
+    callback(err, res.map(course => {
+      if (course.analytics.length > 0)
+        course['demand'] = getCourseScore(course.analytics[0].count, course.capacity)
+      else
+        course['demand'] = 0
+      return course
+    }))
+  })
 }
 
 const updateDept = (dept) => {
@@ -263,4 +302,5 @@ module.exports = {
   updateCourseStats: updateCourseStats,
   getCourse: getCourse,
   connectDB: connectDB,
+  getCourses: getCourses,
 }

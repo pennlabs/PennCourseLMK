@@ -27,7 +27,10 @@ app.get('/', (req, res) => {
 })
 
 app.get('/courses', (req, res) => {
-  res.json(courses)
+  MongoHelper.getCourses(req.query.dept, (err, docs) => {
+    res.json(docs)
+  })
+  // res.json(courses)
 })
 
 app.get('/updatecourses', (req, res) => {
