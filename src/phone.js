@@ -1,4 +1,4 @@
-/* 
+/*
  * Functions related to phone numbers
  */
 
@@ -12,7 +12,7 @@ const createTextableEmail = (number, carrier) => {
 		case "Verizon":
 			carrierEmail = "@vtext.com";
 			break;
-		case "AT&T":
+		case "ATT":
 			carrierEmail = "@txt.att.net";
 			break;
 		case "T-Mobile":
