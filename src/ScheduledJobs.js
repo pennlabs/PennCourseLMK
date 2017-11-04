@@ -51,7 +51,7 @@ const SendEmailsToOpenCourses = () => {
     courseEmails.forEach((emails) => {
       let signupLink = ''
       // if we only have one email, figure out which one and create the appropriate sign up link
-      if (emails.length == 1) {
+      if (emails.length === 1) {
         // if we have a phone email, create sign up link with phone and carrier
         if (Phone.isPhoneEmail(emails[0])) {
           signupLink = createSignupLink(courseName, null, emails[0])
@@ -66,8 +66,10 @@ const SendEmailsToOpenCourses = () => {
         signupLink = createSignupLink(courseName, emails[0], emails[1])
       }
       // send the email with appropriate sign up link
-      Mailer.sendEmail(courseName, email, signupLink, (err, message) => {
-        if (err) console.log(err)
+      emails.map(email => {
+        Mailer.sendEmail(courseName, email, signupLink, (err, message) => {
+          if (err) console.log(err)
+        })
       })
     })
   })
