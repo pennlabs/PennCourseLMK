@@ -15,8 +15,8 @@
       <input type="text" placeholder="phone number" id="phone" name="phone">
       <select id="carrier" name="carrier">
         <option value="Verizon">Verizon</option>
-        <option value="AT&T">AT&amp;T</option>
-        <option value="T-Mobile">T-Mobile</option>
+        <option value="ATT">AT&amp;T</option>
+        <option value="TMobile">T-Mobile</option>
         <option value="Sprint">Sprint</option>
         <option value="USCellular">US Cellular</option>
       </select><br>
@@ -62,16 +62,16 @@
           $('#email').val(info.email)
         }
         if ('course' in info) {
-          $('#course').val(info.course)
+          $('#course').val(info.course.replace(/-/g, ' '))
         }
         if ('phone' in info) {
-          $('#phone').val(info.phonenumber)
+          $('#phone').val(info.phone)
         }
         if ('carrier' in info) {
           $('#carrier').val(info.carrier)
         }
         if ('notifications' in info) {
-          $('#notifications').prop('checked', info.notifications)
+          $('#notifications').prop('checked', true)
         }
       }
     </script>
