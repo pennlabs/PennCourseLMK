@@ -280,4 +280,5 @@ module.exports = {
   updateDept: updateDept,
   updateCourseStats: updateCourseStats,
   getCourse: getCourse,
+  deactivateEmail: deactivateEmail,
 }

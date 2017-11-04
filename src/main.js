@@ -41,7 +41,7 @@ app.get('/stats', (req, res) => {
 })
 
 app.get('/deactivate', (req, res) => {
-  MongoHelper.deactivateEmail(req.query.console, req.query, email)
+  MongoHelper.deactivateEmail(req.query.course, req.query.email)
   res.sendFile(path.join(__dirname + '/../index.html'))
 })
 
