@@ -67,12 +67,12 @@ const insertCoursesToMongo = (callback) => {
   console.log('starting course search...')
   // Search all courses for the current semester
   registrar.search({term: getCurrentSemester(), course_id: ''}, courses => {
-    // console.log(courses);
     console.log('courses query complete!')
     for (let j = 0; j < courses.length; j++) {
       if (courses[j])
         MongoHelper.insertCourse(courses[j])
     }
+    callback && callback()
   })
 }
 
