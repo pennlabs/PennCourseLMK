@@ -23,16 +23,16 @@ const server = email.server.connect({
 });
 
 // ------ Public functions ------
-const sendEmail = (course, email, signupLink, callback) => {
-	console.log('LMK email sent to ' + email + ' for ' + course);
+const sendEmail = (courseName, courseCode, email, signupLink, callback) => {
+	console.log('LMK email sent to ' + email + ' for ' + courseName);
+  MongoHelper.updateEmailOptions(courseCode, email)
   if (process.env.MODE === 'prod') {
     server.send({
       from: 'Penn Course LMK <penncourselmk@gmail.com>',
       to: email,
-      subject: course + ' is now open!',
-      attachment: [{data: emailText(course, signupLink), alternative: true}]
+      subject: courseName + ' is now open!',
+      attachment: [{data: emailText(courseName, signupLink), alternative: true}]
     }, function (err, message) {
-    	MongoHelper.updateEmailOptions(course, email)
       callback(err, message);
     });
   }

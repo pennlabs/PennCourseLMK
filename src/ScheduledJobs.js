@@ -15,7 +15,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
             Now, we check what the status of the course was the last time we checked its status.
             If it was false and now it is true, we send the emails. Otherwise,
           */
-          if (courseInfo.open && ((course && course.lastStatus && course.lastStatus !== true) || !course)) {
+          if (courseInfo.open && (!course || !course.lastStatus)) {
             let courseEmails = doc.emails
             callback(courseInfo.name, backendCourseName, courseEmails)
           }
@@ -67,7 +67,7 @@ const SendEmailsToOpenCourses = () => {
       }
       // send the email with appropriate sign up link
       emails.map(email => {
-        Mailer.sendEmail(courseName, email, signupLink, (err, message) => {
+        Mailer.sendEmail(courseName, backendCourseName, email, signupLink, (err, message) => {
           if (err) console.log(err)
         })
       })

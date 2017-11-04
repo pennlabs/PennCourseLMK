@@ -167,9 +167,10 @@ const findMaxCourseCount = () => {
 }
 
 const updateEmailOptions = (course, email) => {
+  const q = {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()}
   db.collection('emails').updateOne(
-    {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()},
-    {stopEmails: true})
+    q,
+    {$set: {stopEmails: true}}).then(x => console.log(x.result))
 }
 
 const updateCourseStats = (course, isOpen) => {
