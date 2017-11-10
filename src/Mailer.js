@@ -15,7 +15,8 @@ const emailText = (course, signupLink) => {
 }
 
 const phoneText = (course, signupLink) => {
-  return course + ' is now open! Sign up here: https://pennintouch.apps.upenn.edu/ . If you did not get the course, you can sign up again here: ' + signupLink
+  return course + ' is now open! Sign up here: http://tiny.cc/lmk\n ' +
+    'If you missed out, resign up: ' + signupLink
 }
 
 const server = email.server.connect({
@@ -32,14 +33,14 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
   MongoHelper.updateEmailOptions(courseCode, email)
   if (process.env.MODE === 'prod') {
     let msgText = ''
-    if (isPhoneEmail) {msgText = phoneText(courseName, signupLink)}
+    if (isPhoneEmail) {msgText = phoneText(courseCode.replace(/\s/g, ''), signupLink)}
     else {msgText = emailText(courseName, signupLink)}
 
     let d = {
       text: msgText,
       attachment: [{data: msgText, alternative: true}],
       to: email,
-      from: 'PennCourseLMK'
+      from: 'PennCourseLMK <penncourselmk@gmail.com>'
     }
     if (!isPhoneEmail) {
       d.from = 'Penn Course LMK <penncourselmk@gmail.com>'

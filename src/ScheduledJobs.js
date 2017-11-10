@@ -2,6 +2,7 @@ const ApiServer = require('./ApiServer.js')
 const MongoHelper = require('./MongoHelper.js')
 const Mailer = require('./Mailer.js')
 const Phone = require('./phone.js')
+const request = require('request')
 
 // -----------Helper functions -------------
 const FindEmailsAndCoursesWithOpenings = (callback) => {
@@ -28,7 +29,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
 }
 
 // creates a link for users to sign up for a particular course
-const createSignupLink = (course, email, phoneEmail) => {
+const createSignupLink = (course, email, phoneEmail, callback) => {
   // check to see if we have an email to add to the link
   let linkEmail = ''
   if (email !== null) { linkEmail = '&email=' + email }
@@ -41,7 +42,24 @@ const createSignupLink = (course, email, phoneEmail) => {
     linkCarrier = '&carrier=' + split[1]
   }
 
-  return 'https://penncourselmk.com/?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
+  let link = 'https://penncourselmk.com/?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
+  let options = {
+    uri: 'https://www.googleapis.com/urlshortener/v1/url',
+    qs: {key: process.env.URL_KEY},
+    method: 'POST',
+    json: {
+      "longUrl": link
+    }
+  }
+
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      callback && callback(body.id) // Print the shortened url.
+    } else {
+      // handle error?
+    }
+  });
+
 }
 
 // -----------Public functions -------------
@@ -55,28 +73,32 @@ const SendEmailsToOpenCourses = () => {
       if (emails.length === 1) {
         // if we have a phone email, create sign up link with phone and carrier
         if (Phone.isPhoneEmail(emails[0])) {
-          signupLink = createSignupLink(backendCourseName, null, emails[0])
-          Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
-            if (err) console.log(err)
+          createSignupLink(backendCourseName, null, emails[0], signupLink => {
+            Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
+              if (err) console.log(err)
+            })
           })
         }
         // otherwise, we have a regular email
         else {
-          signupLink = createSignupLink(backendCourseName, emails[0], null)
-          Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
-            if (err) console.log(err)
+          createSignupLink(backendCourseName, emails[0], null, signupLink => {
+            Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
+              if (err) console.log(err)
+            })
           })
         }
       }
       // otherwise, we have both email and phone
       else {
-        signupLink = createSignupLink(backendCourseName, emails[0], emails[1])
-        Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
-          if (err) console.log(err)
+        createSignupLink(backendCourseName, emails[0], emails[1], signupLink => {
+          Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
+            if (err) console.log(err)
+          })
+          Mailer.sendEmail(courseName, backendCourseName, emails[1], signupLink, true, (err, message) => {
+            if (err) console.log(err)
+          })
         })
-        Mailer.sendEmail(courseName, backendCourseName, emails[1], signupLink, true, (err, message) => {
-          if (err) console.log(err)
-        })
+
       }
       // send the email with appropriate sign up link
     })
