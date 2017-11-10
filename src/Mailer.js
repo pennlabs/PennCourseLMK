@@ -15,9 +15,10 @@ const emailText = (course, signupLink) => {
 }
 
 const phoneText = (course, signupLink) => {
-  return 'The course you requested, ' + course + ', is now open! Hurry and sign up here: ' +
-    'https://pennintouch.apps.upenn.edu/ . If you did not get the requested course, you can sign up ' +
-    'again here: ' + signupLink + ' . Thank you for using Penn Course LMK!'
+  // return 'The course you requested, ' + course + ', is now open! Hurry and sign up here: ' +
+  //   'https://pennintouch.apps.upenn.edu/ . If you did not get the requested course, you can sign up ' +
+  //   'again here: ' + signupLink + ' . Thank you for using Penn Course LMK!'
+  return ' ' + signupLink
 }
 
 const server = email.server.connect({
@@ -36,12 +37,18 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
     let msgText = ''
     if (isPhoneEmail) {msgText = phoneText(courseName, signupLink)}
     else {msgText = emailText(courseName, signupLink)}
-    server.send({
-      from: 'Penn Course LMK <penncourselmk@gmail.com>',
+
+    let d = {
+      text: msgText,
+      attachment: [{data: msgText, alternative: true}],
       to: email,
-      subject: courseName + ' is now open!',
-      attachment: [{data: msgText, alternative: true}]
-    }, function (err, message) {
+      from: 'Penn Course LMK <penncourselmk@gmail.com>'
+    }
+    if (!isPhoneEmail) {
+      d.subject = courseName + ' is now open!'
+    }
+
+    server.send(d, function (err, message) {
       callback(err, message);
     });
   }

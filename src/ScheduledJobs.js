@@ -41,7 +41,7 @@ const createSignupLink = (course, email, phoneEmail) => {
     linkCarrier = '&carrier=' + split[1]
   }
 
-  return 'https://penncourselmk.com/?' + 'course=' + course.replace(/ /g, '-') + linkEmail + linkPhone + linkCarrier
+  return 'https://penncourselmk.com/?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
 }
 
 // -----------Public functions -------------
@@ -49,19 +49,20 @@ const createSignupLink = (course, email, phoneEmail) => {
 const SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings((courseName, backendCourseName, courseEmails) => {
     courseEmails.forEach((emails) => {
+      console.log(emails)
       let signupLink = ''
       // if we only have one email, figure out which one and create the appropriate sign up link
       if (emails.length === 1) {
         // if we have a phone email, create sign up link with phone and carrier
         if (Phone.isPhoneEmail(emails[0])) {
-          signupLink = createSignupLink(courseName, null, emails[0])
+          signupLink = createSignupLink(backendCourseName, null, emails[0])
           Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
             if (err) console.log(err)
           })
         }
         // otherwise, we have a regular email
         else {
-          signupLink = createSignupLink(courseName, emails[0], null)
+          signupLink = createSignupLink(backendCourseName, emails[0], null)
           Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
             if (err) console.log(err)
           })
@@ -69,11 +70,11 @@ const SendEmailsToOpenCourses = () => {
       }
       // otherwise, we have both email and phone
       else {
-        signupLink = createSignupLink(courseName, emails[0], emails[1])
+        signupLink = createSignupLink(backendCourseName, emails[0], emails[1])
         Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
           if (err) console.log(err)
         })
-        Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
+        Mailer.sendEmail(courseName, backendCourseName, emails[1], signupLink, true, (err, message) => {
           if (err) console.log(err)
         })
       }

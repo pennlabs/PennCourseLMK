@@ -275,6 +275,8 @@ const getCourses = (section, callback) => {
         course['demand'] = getCourseScore(course.analytics[0].count, course.capacity)
       else
         course['demand'] = 0
+
+      course.section_id = course.section_id.replace(/ /g, '')
       return course
     }))
   })

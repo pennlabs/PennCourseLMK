@@ -21,7 +21,7 @@ const getCourseInfo = (course, callback) => {
       const c = result[0]
       if (c) {
         // console.log(c)
-        const name = c.section_id_normalized + ": " + c.section_title
+        const name = c.section_id_normalized.replace(/\s/g, '') + ": " + c.section_title
         const status = !c.is_closed
         const number = c.course_number
         const section = c.section_number
