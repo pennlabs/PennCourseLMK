@@ -15,10 +15,7 @@ const emailText = (course, signupLink) => {
 }
 
 const phoneText = (course, signupLink) => {
-  // return 'The course you requested, ' + course + ', is now open! Hurry and sign up here: ' +
-  //   'https://pennintouch.apps.upenn.edu/ . If you did not get the requested course, you can sign up ' +
-  //   'again here: ' + signupLink + ' . Thank you for using Penn Course LMK!'
-  return ' ' + signupLink
+  return course + ' is now open! Sign up here: https://pennintouch.apps.upenn.edu/ . If you did not get the course, you can sign up again here: ' + signupLink
 }
 
 const server = email.server.connect({
@@ -42,9 +39,10 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
       text: msgText,
       attachment: [{data: msgText, alternative: true}],
       to: email,
-      from: 'Penn Course LMK <penncourselmk@gmail.com>'
+      from: 'PennCourseLMK'
     }
     if (!isPhoneEmail) {
+      d.from = 'Penn Course LMK <penncourselmk@gmail.com>'
       d.subject = courseName + ' is now open!'
     }
 
