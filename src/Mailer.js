@@ -16,7 +16,7 @@ const emailText = (course, signupLink) => {
 
 const phoneText = (course, signupLink) => {
   return course + ' is now open! Sign up here: http://tiny.cc/lmk\n ' +
-    'If you missed out, resign up: ' + signupLink
+    'If you didn\'t get the course, sign up again here: ' + signupLink
 }
 
 const server = email.server.connect({
