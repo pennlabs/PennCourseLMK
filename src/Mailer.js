@@ -14,6 +14,12 @@ const emailText = (course, signupLink) => {
 	<i>The Penn Course LMK team</i>`
 }
 
+const phoneText = (course, signupLink) => {
+  return 'The course you requested, ' + course + ', is now open! Hurry and sign up here: ' +
+    'https://pennintouch.apps.upenn.edu/ . If you did not get the requested course, you can sign up ' +
+    'again here: ' + signupLink + ' . Thank you for using Penn Course LMK!'
+}
+
 const server = email.server.connect({
     user: 'penncourselmk@gmail.com',
     password: process.env.LMK_PASSWORD,
@@ -23,15 +29,18 @@ const server = email.server.connect({
 });
 
 // ------ Public functions ------
-const sendEmail = (courseName, courseCode, email, signupLink, callback) => {
+const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, callback) => {
 	console.log('LMK email sent to ' + email + ' for ' + courseName);
   MongoHelper.updateEmailOptions(courseCode, email)
   if (process.env.MODE === 'prod') {
+    let msgText = ''
+    if (isPhoneEmail) {msgText = phoneText(courseName, signupLink)}
+    else {msgText = emailText(courseName, signupLink)}
     server.send({
       from: 'Penn Course LMK <penncourselmk@gmail.com>',
       to: email,
       subject: courseName + ' is now open!',
-      attachment: [{data: emailText(courseName, signupLink), alternative: true}]
+      attachment: [{data: msgText, alternative: true}]
     }, function (err, message) {
       callback(err, message);
     });

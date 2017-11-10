@@ -55,22 +55,29 @@ const SendEmailsToOpenCourses = () => {
         // if we have a phone email, create sign up link with phone and carrier
         if (Phone.isPhoneEmail(emails[0])) {
           signupLink = createSignupLink(courseName, null, emails[0])
+          Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
+            if (err) console.log(err)
+          })
         }
         // otherwise, we have a regular email
         else {
           signupLink = createSignupLink(courseName, emails[0], null)
+          Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
+            if (err) console.log(err)
+          })
         }
       }
       // otherwise, we have both email and phone
       else {
         signupLink = createSignupLink(courseName, emails[0], emails[1])
-      }
-      // send the email with appropriate sign up link
-      emails.map(email => {
-        Mailer.sendEmail(courseName, backendCourseName, email, signupLink, (err, message) => {
+        Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, false, (err, message) => {
           if (err) console.log(err)
         })
-      })
+        Mailer.sendEmail(courseName, backendCourseName, emails[0], signupLink, true, (err, message) => {
+          if (err) console.log(err)
+        })
+      }
+      // send the email with appropriate sign up link
     })
   })
 }
