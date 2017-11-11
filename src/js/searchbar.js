@@ -2,7 +2,11 @@ $(document).ready(function(){
   var courses = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('section_id'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: '/courses'
+    // prefetch: '/courses'
+    remote: {
+      url: '/courses?dept=%QUERY',
+      wildcard: '%QUERY'
+    }
     });
 
   $('#bloodhound .typeahead').typeahead({

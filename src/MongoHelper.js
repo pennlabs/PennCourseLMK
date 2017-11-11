@@ -230,8 +230,8 @@ const RemoveAllEmailsFromCourse = (course, callback) => {
 
 const insertCourse = (course) => {
   let c = {
-    section_id: course.section_id_normalized,
-    course: course.section_id_normalized,
+    section_id: course.section_id_normalized.replace(/\s/g, ''),
+    course: course.section_id_normalized.replace(/\s/g, ''),
     course_title: course.course_title,
     instructors: course.instructors.map(x => x.name),
     meetings_days: course.meetings.map(m => m.meeting_days + ' ' + m.start_time + ' - ' + m.end_time),
