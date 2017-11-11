@@ -1,6 +1,7 @@
 const api = require("penn-sdk")
 const request = require('request')
 const getCurrentSemester = require("./MongoHelper").GetCurrentSemester
+const MongoHelper = require('./MongoHelper')
 Registrar = api.Registrar
 
 const API_USERNAME = process.env.PENN_SDK_USERNAME
@@ -20,7 +21,7 @@ const getCourseInfo = (course, callback) => {
       const c = result[0]
       if (c) {
         // console.log(c)
-        const name = c.section_id_normalized + ": " + c.section_title
+        const name = c.section_id_normalized.replace(/\s/g, '') + ": " + c.section_title
         const status = !c.is_closed
         const number = c.course_number
         const section = c.section_number
@@ -62,6 +63,19 @@ const getAllCourseInfo = (dept, callback) => {
   )
 }
 
+const insertCoursesToMongo = (callback) => {
+  console.log('starting course search...')
+  // Search all courses for the current semester
+  registrar.search({term: getCurrentSemester(), course_id: ''}, courses => {
+    console.log('courses query complete!')
+    for (let j = 0; j < courses.length; j++) {
+      if (courses[j])
+        MongoHelper.insertCourse(courses[j])
+    }
+    callback && callback()
+  })
+}
+
 const fetchDepartments = (callback) => {
   request(BASE_URL, (err, res, body) => {
     if(err) {
@@ -85,19 +99,11 @@ const getAllCourses = (callback) => {
   callback(courses)
 }
 
-const getCourseScore = (signups, capacity) => {
-  let ratio = (signups * 1.0)/capacity
-  let score = ratio/0.025;
-  let finalScore = ratio | 0;
-  if(finalScore > 10) {
-    finalScore = 10;
-  }
-  return finalScore;
-}
 
 module.exports = {
   getCourseInfo: getCourseInfo,
   getAllCourseInfo: getAllCourseInfo,
   fetchDepartments: fetchDepartments,
-  getAllCourses: getAllCourses
+  getAllCourses: getAllCourses,
+  insertCoursesToMongo: insertCoursesToMongo,
 }
