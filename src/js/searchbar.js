@@ -21,7 +21,7 @@ $(document).ready(function(){
         if(data.instructors.length != 0){ 
           var l = data.instructors.join(', ')
         }
-        return '<p><i>' + data.section_id + '</i> - ' + data.course_title + '<br><small>' + l + '<br>' + data.meeting_days + '</small></p>';
+        return '<p><i>' + data.section_id + '</i> - ' + data.course_title + '<br><small>' + l + '<br>' + data.meetings_days + '</small> <br />'+ data.demand + '</p>';
       }
     }
   });
