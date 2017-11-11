@@ -4,25 +4,116 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Penn Course Alert</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #FAFCFF;
+      color: #2980B9;
+    }
+    a {
+      color: #2e416a;
+      text-decoration: none;
+    }
+    text {
+
+    }
+    button {
+      display: inline-block;
+      padding: 1.2em 1.4em;
+      font-size: 1.3rem;
+      color: #ffffff;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-size: 13px;
+      line-height: 13px;
+      border-radius: .25em;
+      background-color: #DF5D56;
+      border: none;
+    }
+    button, select, input {
+      margin: 5px;
+    }
+    input {
+        border-style: hidden;
+        background-color: #2980B9;
+        padding: 10px;
+        color: #FAFCFF;
+    }
+    input::placeholder {
+        color: #FAFCFF;
+    }
+    input::-webkit-input-placeholder {
+        color: #FAFCFF;
+    }
+	input:-moz-placeholder {
+        color: #FAFCFF;
+    }
+	input::-moz-placeholder {
+        color: #FAFCFF;
+    }
+	input:-ms-input-placeholder {
+        color: #FAFCFF;
+    }
+    input:focus,
+    /*select:focus,*/
+    textarea:focus,
+    button:focus {
+        outline: none;
+    }
+    .full-screen {
+      height: 90vh;
+      min-height: 400px;
+    }
+    .lmk-text-align-center {
+      text-align: center;
+    }
+    @media only screen and (min-width: 768px) {
+      button {
+          padding: 1.4em 1.8em;
+      }
+    }
+    </style>
   </head>
   <body>
-    <div id="container">
-      <div id="title">Penn Course LMK</div>
+    <div class="container full-screen d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <h1>Penn Course Alert</h1>
+        </div>
+        <div class="tow justify-content-center">
+            <p class="lmk-text-align-center">Know when a course becomes open.</p>
+        </div>
+
+        <div class="row justify-content-center">
+          <form class="lmk-text-align-center" action="/submitted" method="POST">
+            <input type="text" placeholder="Email" id="email" name="email">
+            <div id="bloodhound"><input type="text" class="typeahead" placeholder="Course" id="course" name="course"></div>
+            <input type="text" placeholder="Phone Number" id="phone" name="phone"></br>
+            Carrier<br />
+            <select id="carrier" name="carrier">
+              <option value="Verizon">Verizon</option>
+              <option value="ATT">AT&amp;T</option>
+              <option value="TMobile">T-Mobile</option>
+              <option value="Sprint">Sprint</option>
+              <option value="USCellular">US Cellular</option>
+            </select><br>
+            <input type="checkbox" placeholder="notifications" id="notifications" name="notifications">Perpetual Notifications<br>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
-    <form action="/submitted" method="POST">
-      <input type="text" placeholder="email" id="email" name="email">
-      <div id="bloodhound"><input type="text" class="typeahead" placeholder="course" id="course" name="course"></div>
-      <input type="text" placeholder="phone number" id="phone" name="phone">
-      <select id="carrier" name="carrier">
-        <option value="Verizon">Verizon</option>
-        <option value="ATT">AT&amp;T</option>
-        <option value="TMobile">T-Mobile</option>
-        <option value="Sprint">Sprint</option>
-        <option value="USCellular">US Cellular</option>
-      </select><br>
-      <input type="checkbox" placeholder="notifications" id="notifications" name="notifications">Perpetual Notifications<br>
-      <button type="submit">Submit</button>
-    </form>
+    <footer class="footer">
+      <div class="container lmk-text-align-center">
+          Made with 💖&nbsp;by <a href="http://pennlabs.org" target="_blank">Penn Labs</a>
+      </div>
+    </footer>
+
     <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/typeahead.bundle.js"></script>
     <script type="text/javascript" src="/searchbar.js"></script>
