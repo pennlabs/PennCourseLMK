@@ -1,6 +1,7 @@
 const email = require("emailjs")
 const MongoHelper = require("./MongoHelper")
 
+const name = 'Penn Course Alert'
 
 // ------ Helper functions ------
 const emailText = (course, signupLink) => {
@@ -9,13 +10,13 @@ const emailText = (course, signupLink) => {
 	The course you requested, ` + course + `, is now open! Hurry and sign up now!<br><br>
 	The link to Penn InTouch is <a href="https://pennintouch.apps.upenn.edu/">here</a>.<br><br>
 	If you did not get the requested course, you can sign up again <a href="` + signupLink + `">here</a>.<br><br>
-	Thank you for using Penn Course LMK!<br><br>
+	Thank you for using `+name+`!<br><br>
 	Sincerely,<br>
-	<i>The Penn Course LMK team</i>`
+	<i>The `+ name +`team</i>`
 }
 
 const phoneText = (course, signupLink) => {
-  return course + ' is now open! Sign up here: http://tiny.cc/lmk\n ' +
+  return course + ' is now open! Register on Penn InTouch: http://tiny.cc/lmk\n ' +
     'If you didn\'t get the course, sign up again here: ' + signupLink
 }
 

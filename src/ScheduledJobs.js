@@ -4,6 +4,8 @@ const Mailer = require('./Mailer.js')
 const Phone = require('./phone.js')
 const request = require('request')
 
+const domain = 'https://penncoursealert.com/'
+
 // -----------Helper functions -------------
 const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
@@ -42,7 +44,7 @@ const createSignupLink = (course, email, phoneEmail, callback) => {
     linkCarrier = '&carrier=' + split[1]
   }
 
-  let link = 'https://penncourselmk.com/?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
+  let link = domain + '?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
   let options = {
     uri: 'https://www.googleapis.com/urlshortener/v1/url',
     qs: {key: process.env.URL_KEY},

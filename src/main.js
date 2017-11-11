@@ -57,7 +57,9 @@ app.post('/submitted', (req, res) => {
   ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
     // console.log(info)
-    if (testing /* !info.open */) {
+    if (info.open) {
+      res.redirect('/?error=courseIsOpen')
+    } else {
       // IMPORTANT: Make sure that course code is normalized before inserting into database.
       let course = info.normalizedCourse
 
@@ -83,9 +85,7 @@ app.post('/submitted', (req, res) => {
         // MongoHelper.GetEmailsFromCourse(course) // Debugging
         MongoHelper.IncrementCourseCount(course)
       }
-    } else {
-      console.log('course is already open!!!')
+      res.redirect('/')
     }
-    res.redirect('/')
   })
 })
