@@ -7,6 +7,7 @@
     <title>Penn Course Alert</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/uri.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
     body {
@@ -18,14 +19,11 @@
       color: #2e416a;
       text-decoration: none;
     }
-    text {
-
-    }
     button {
       display: inline-block;
       padding: 1.2em 1.4em;
       font-size: 1.3rem;
-      color: #ffffff;
+      color: #FAFCFF;
       text-transform: uppercase;
       font-weight: bold;
       letter-spacing: 1px;
@@ -41,11 +39,18 @@
     input {
         border-style: hidden;
         background-color: #2980B9;
-        padding: 10px;
+        padding: 10px 25px;
         color: #FAFCFF;
     }
     input::placeholder {
         color: #FAFCFF;
+        padding: 1.2em 0;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 13px;
+        line-height: 13px;
     }
     input::-webkit-input-placeholder {
         color: #FAFCFF;
@@ -64,6 +69,10 @@
     textarea:focus,
     button:focus {
         outline: none;
+    }
+    .error-msg {
+        color: #DF5D56;
+        margin-top: 1rem;
     }
     .full-screen {
       height: 90vh;
@@ -86,7 +95,7 @@
           <h1>Penn Course Alert</h1>
         </div>
         <div class="tow justify-content-center">
-            <p class="lmk-text-align-center">Know when a course becomes open.</p>
+            <p id="description" class="lmk-text-align-center">Know when a course becomes open.</p>
         </div>
 
         <div class="row justify-content-center">
@@ -102,7 +111,7 @@
               <option value="Sprint">Sprint</option>
               <option value="USCellular">US Cellular</option>
             </select><br>
-            <input type="checkbox" placeholder="notifications" id="notifications" name="notifications">Perpetual Notifications<br>
+            <input type="checkbox" placeholder="notifications" id="notifications" name="notifications"><label for="notifications">Perpetual Notifications</label><br>
             <button type="submit">Submit</button>
           </form>
         </div>
@@ -117,32 +126,34 @@
     <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/typeahead.bundle.js"></script>
     <script type="text/javascript" src="/searchbar.js"></script>
+
     <script>
+
       // on submission of form, update local storage to remember user's data
       $('form').submit(e => {
-        localStorage.setItem('lmkEmail', e.target.email.value)
-        localStorage.setItem('lmkPhone', e.target.phone.value)
-        localStorage.setItem('lmkCarrier', e.target.carrier.value)
-        localStorage.setItem('lmkNotifications', e.target.notifications.checked)
+        localStorage.setItem('lmkEmail', e.target.email.value);
+        localStorage.setItem('lmkPhone', e.target.phone.value);
+        localStorage.setItem('lmkCarrier', e.target.carrier.value);
+        localStorage.setItem('lmkNotifications', e.target.notifications.checked);
       });
 
       // parses form info out of link
       function parseURL(url) {
-        let formInfo = {}
+        let formInfo = {};
         const linkData = url.replace(/.*\?/, '').split('&');
         for (let i = 0; i < linkData.length; i++) {
-            let split = linkData[i].split('=')
-            formInfo[split[0]] = split[1]
+            let split = linkData[i].split('=');
+            formInfo[split[0]] = split[1];
         }
-        return formInfo
+        return formInfo;
       }
 
       // first, pre-populate form from local storage
-      $('#email').val(localStorage.getItem('lmkEmail'))
-      $('#phone').val(localStorage.getItem('lmkPhone'))
-      $('#carrier').val(localStorage.getItem('lmkCarrier'))
+      $('#email').val(localStorage.getItem('lmkEmail'));
+      $('#phone').val(localStorage.getItem('lmkPhone'));
+      $('#carrier').val(localStorage.getItem('lmkCarrier'));
       if (localStorage.getItem('lmkNotifications') === 'true') {
-        $('#notifications').prop('checked', true)
+        $('#notifications').prop('checked', true);
       }
       // if URL contains '?', then only pre-populate form from parsed URL element
       // if it exists (in order to not overwrite local storage populated fields
@@ -150,19 +161,24 @@
       if (window.location.href.includes('?')) {
         const info = parseURL(window.location.href)
         if ('email' in info) {
-          $('#email').val(info.email)
+          $('#email').val(info.email);
         }
         if ('course' in info) {
-          $('#course').val(info.course.replace(/-/g, ' '))
+          $('#course').val(info.course.replace(/-/g, ' '));
         }
         if ('phone' in info) {
-          $('#phone').val(info.phone)
+          $('#phone').val(info.phone);
         }
         if ('carrier' in info) {
-          $('#carrier').val(info.carrier)
+          $('#carrier').val(info.carrier);
         }
         if ('notifications' in info) {
-          $('#notifications').prop('checked', true)
+          $('#notifications').prop('checked', true);
+        }
+        if ('error' in info) {
+            if (info.error === 'courseIsOpen') {
+                $('#description').append("<div class='error-msg'>Error: Course already open</div>");
+            }
         }
       }
     </script>
