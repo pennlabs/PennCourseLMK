@@ -15,21 +15,22 @@ const GetCurrentSemester = () => {
   let d = new Date()
   let year = d.getYear() + 1900
   switch(d.getMonth()) {
-    case 9:
-    case 10:
-    case 11:
-    case 0:
+    case 10: // November
+    case 11: // December
+      return (year+1)+'A'
+    case 0: // January
+    case 1: // February
+      return year + 'A'
+    case 2: // March
+    case 3: // April
+    case 4: // May
+    case 5: // June
+      // return year+'B' // summer session
+    case 6: // July
+    case 7: // August
+    case 8: // September
+    case 9: // October
       return year+'C'
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      return year+'A'
-    case 6:
-    case 7:
-    case 8:
-      return year+'B'
   }
 
 }
