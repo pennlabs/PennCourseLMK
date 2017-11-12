@@ -107,7 +107,12 @@ const SendEmailsToOpenCourses = () => {
   })
 }
 
+let importCourses = () => {
+  ApiServer.insertCoursesToMongo()
+}
+
 module.exports = {
   SendEmailsToOpenCourses: SendEmailsToOpenCourses,
-  FindEmailsAndCoursesWithOpenings: FindEmailsAndCoursesWithOpenings
+  FindEmailsAndCoursesWithOpenings: FindEmailsAndCoursesWithOpenings,
+  importCourses: importCourses
 }

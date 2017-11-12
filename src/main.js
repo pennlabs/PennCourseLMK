@@ -10,6 +10,8 @@ var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
 
 Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
+
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -33,10 +35,10 @@ app.get('/courses', (req, res) => {
   // res.json(courses)
 })
 
-app.get('/updatecourses', (req, res) => {
-  ApiServer.insertCoursesToMongo()
-  res.send("OK!")
-})
+// app.get('/updatecourses', (req, res) => {
+//   ApiServer.insertCoursesToMongo()
+//   res.send("OK!")
+// })
 
 app.use(express.static(__dirname + '/js'))
 
