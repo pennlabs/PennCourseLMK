@@ -1,4 +1,4 @@
-/* 
+/*
  * Functions related to phone numbers
  */
 
