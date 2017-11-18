@@ -35,10 +35,14 @@ app.get('/courses', (req, res) => {
   // res.json(courses)
 })
 
-// app.get('/updatecourses', (req, res) => {
-//   ApiServer.insertCoursesToMongo()
-//   res.send("OK!")
-// })
+app.get('/updatecourses', (req, res) => {
+  if (process.env.UPDATEKEY && req.query.code === process.env.UPDATEKEY) {
+    ApiServer.insertCoursesToMongo()
+    res.send('Courses Updating!')
+  } else {
+    res.send('Access Denied')
+  }
+})
 
 app.use(express.static(__dirname + '/js'))
 
