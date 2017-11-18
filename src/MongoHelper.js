@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient
 let url = 'mongodb://localhost:27017/penncourselmk'
 
-const PRODUCTION_MODE = false
+const PRODUCTION_MODE = (process.env.MODE === 'prod')
 if (PRODUCTION_MODE) {
   url = 'mongodb://pennlabs:' + process.env.LMK_PASSWORD +
   '@ds155080.mlab.com:55080/penncourselmk'
