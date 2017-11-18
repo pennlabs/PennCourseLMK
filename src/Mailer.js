@@ -21,7 +21,7 @@ const phoneText = (course, signupLink) => {
 }
 
 const server = email.server.connect({
-    user: 'penncourselmk@gmail.com',
+    user: 'penncoursealert@gmail.com',
     password: process.env.LMK_PASSWORD,
     host: 'smtp.gmail.com',
     tls: true,
@@ -41,10 +41,10 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
       text: msgText,
       attachment: [{data: msgText, alternative: true}],
       to: email,
-      from: 'PennCourseLMK <penncourselmk@gmail.com>'
+      from: 'PennCourseAlert <penncourselmk@gmail.com>'
     }
     if (!isPhoneEmail) {
-      d.from = 'Penn Course LMK <penncourselmk@gmail.com>'
+      d.from = 'Penn Course Alert <penncourselmk@gmail.com>'
       d.subject = courseName + ' is now open!'
     }
 
