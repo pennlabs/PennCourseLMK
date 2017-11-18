@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 MongoHelper.connectDB((err, db) => {
   if (!err) {
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log('listening on 3000')
       MongoHelper.CreateCollections()
     })
