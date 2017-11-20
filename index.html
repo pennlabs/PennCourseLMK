@@ -67,7 +67,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     }
     input::placeholder {
         color: #FAFCFF;
-        padding: 1.2em 0;
+        padding: .5em 0;
         font-size: 1.3rem;
         text-transform: uppercase;
         font-weight: bold;
@@ -76,6 +76,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         line-height: 13px;
     }
     input[type="text"] {
+      width: 250px;
+    }
+    input[type="tel"] {
       width: 250px;
     }
     input::-webkit-input-placeholder {
@@ -153,7 +156,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           <form class="lmk-text-align-center" action="/submitted" method="POST">
             <input type="text" placeholder="Email" id="email" name="email">
             <div id="bloodhound"><input type="text" class="typeahead" placeholder="Course" id="course" name="course"></div>
-            <input type="text" placeholder="Phone Number" id="phone" name="phone"></br>
+            <input type="tel" placeholder="Phone Number" id="phone" name="phone"></br>
             Carrier<br />
             <select id="carrier" name="carrier">
               <option value="Verizon">Verizon</option>
