@@ -257,6 +257,7 @@ const getCourseScore = (signups, capacity) => {
 
 const getCourses = (section, callback) => {
   let q = {semester: GetCurrentSemester()}
+  section = section.replace(/\s+/g, '-')
   if (section) q.section_id = new RegExp('^'+section, 'i')
   db.collection('courses').aggregate([
     {
