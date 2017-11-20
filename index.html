@@ -61,6 +61,9 @@
         font-size: 13px;
         line-height: 13px;
     }
+    input[type="text"] {
+      width: 250px;
+    }
     input::-webkit-input-placeholder {
         color: #FAFCFF;
     }
@@ -90,10 +93,35 @@
     .lmk-text-align-center {
       text-align: center;
     }
+    .lmk-labs-byline {
+      color: black;
+    }
+    .lmk-labs-byline > a {
+      color: #0060B6;
+    }
+    .lmk-rec-element {
+      background-color: white;
+      cursor: pointer;
+      text-align: left;
+    }
+    .tt-dataset {
+      overflow: scroll;
+      height: 15em;
+    }
     @media only screen and (min-width: 768px) {
       button {
           padding: 1.4em 1.8em;
       }
+    }
+    img {
+      display: inline;
+      margin: 0 0 0 0;
+      max-height: 4vw;
+      max-width: 4vw;
+    }
+    .lmk-rec-element:hover {
+      color: #FAFCFF;
+      background-color: #2980B9;
     }
     </style>
   </head>
@@ -101,9 +129,9 @@
     <div class="container full-screen d-flex align-items-center">
       <div class="container">
         <div class="row justify-content-center">
-          <h1>Penn Course Alert</h1>
+          <img src="/PCA_logo.svg"> <h1>Penn Course Alert</h1>
         </div>
-        <div class="tow justify-content-center">
+        <div class="row justify-content-center">
             <p id="description" class="lmk-text-align-center">Know when a course becomes open.</p>
         </div>
 
@@ -127,7 +155,7 @@
       </div>
     </div>
     <footer class="footer">
-      <div class="container lmk-text-align-center">
+      <div class="container lmk-text-align-center lmk-labs-byline">
           Made with 💖&nbsp;by <a href="http://pennlabs.org" target="_blank">Penn Labs</a>
       </div>
     </footer>

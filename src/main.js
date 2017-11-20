@@ -8,16 +8,18 @@ const courses = require('../courses.json')
 const ScheduledJobs = require('./ScheduledJobs.js')
 var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
+const favicon = require('serve-favicon');
 
 Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
 
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(favicon(path.join(__dirname, '../favicon.png')));
 
 MongoHelper.connectDB((err, db) => {
   if (!err) {
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT || 3000, () => {
       console.log('listening on 3000')
       MongoHelper.CreateCollections()
     })
@@ -45,6 +47,7 @@ app.get('/updatecourses', (req, res) => {
 })
 
 app.use(express.static(__dirname + '/js'))
+
 
 app.get('/stats', (req, res) => {
   MongoHelper.findMaxCourseCount()

@@ -19,13 +19,19 @@ $(document).ready(function(){
     source: courses,
     display: 'section_id',
     templates: {
-      empty: 'No courses found.',
+      empty: '<div class="lmk-rec-element list-group-item">No matching courses found.</div>',
       suggestion: function(data) {
-        var l = ''
+        var instructors = ''
         if(data.instructors.length != 0){ 
-          var l = data.instructors.join(', ')
+          var instructors = data.instructors.join(', ')
         }
-        return '<p><i>' + data.section_id + '</i> - ' + data.course_title + '<br><small>' + l + '<br>' + data.meetings_days + '</small> <br />'+ data.demand + '</p>';
+        return '<div class="lmk-rec-element list-group-item">' +
+          // '<p>' + data.section_id + '</p>' +
+          data.section_id + '<br />' +
+          '<small>' + data.course_title + '</small>' +
+          // '<br><small>' + instructors + '<br />' + data.meetings_days + '</small> <br />'+
+          // data.demand +
+          '</div>';
       }
     }
   });
