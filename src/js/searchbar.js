@@ -1,3 +1,22 @@
+function getDemandIcon(demand) {
+  switch(demand) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return '<i style="color: limegreen" class="fa fa-thermometer-empty" aria-hidden="true"></i>'
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return '<i style="color: orange" class="fa fa-thermometer-half" aria-hidden="true"></i>'
+    case 8:
+    case 9:
+    case 10:
+      return '<i style="color: orangered" class="fa fa-thermometer-full" aria-hidden="true"></i>'
+  }
+}
+
 $(document).ready(function(){
   var courses = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('section_id'),
@@ -29,8 +48,7 @@ $(document).ready(function(){
           // '<p>' + data.section_id + '</p>' +
           data.section_id + '<br />' +
           '<small>' + data.course_title + '</small>' +
-          // '<br><small>' + instructors + '<br />' + data.meetings_days + '</small> <br />'+
-          // data.demand +
+          '<span class="lmk-command-icon">'+getDemandIcon(data.demand)+'</span>' +
           '</div>';
       }
     }
