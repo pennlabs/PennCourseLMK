@@ -24,6 +24,9 @@ const createTextableEmail = (number, carrier) => {
 		case "USCellular":
 			carrierEmail = "@email.uscc.net";
 			break;
+		case "nocarrier":
+			carrierEmail = "@example.com"
+			break;
 		default:
 			throw "Error: carrier not supported";
 	}
@@ -53,6 +56,9 @@ const parsePhoneEmail = (phoneEmail) => {
   	case 'email.uscc.net':
   		carrier = 'USCellular'
   		break
+		case 'example.com':
+			carrier = 'nocarrier'
+			break
   	default:
   		throw "Error: carrier not found"
   }
