@@ -88,8 +88,8 @@ app.post('/submitted', (req, res) => {
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
       if (req.body.phone && req.body.carrier) {
-        console.log(req.body.carrier);
-        console.log(req.body.phone);
+        // console.log(req.body.carrier);
+        // console.log(req.body.phone);
         let phoneEmail = Phone.createTextableEmail(req.body.phone, req.body.carrier);
         emails.push(phoneEmail)
       }

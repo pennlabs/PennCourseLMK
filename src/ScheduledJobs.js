@@ -73,7 +73,7 @@ const createSignupLink = (course, email, phoneEmail, callback) => {
 const SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings((courseName, backendCourseName, courseEmails) => {
     courseEmails.forEach((emails) => {
-      console.log(emails)
+      // console.log(emails)
       let signupLink = ''
       // if we only have one email, figure out which one and create the appropriate sign up link
       if (emails.length === 1) {
