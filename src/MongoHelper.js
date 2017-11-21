@@ -264,6 +264,11 @@ const getCourses = (section, callback) => {
       $match: q
     },
     {
+      $sort: {
+        section_id: 1
+      }
+    },
+    {
       $lookup: {
         from: 'analytics',
         localField: 'course',
