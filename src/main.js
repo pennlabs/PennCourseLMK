@@ -66,7 +66,7 @@ app.post('/submitted', (req, res) => {
   // ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
     // console.log(info)
-    let info = {open: true, normalizedCourse: req.body.course}
+    let info = {open: false, normalizedCourse: req.body.course}
     if (info.open) {
       res.redirect('/?error=courseIsOpen')
     } else {
