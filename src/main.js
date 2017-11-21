@@ -56,9 +56,11 @@ app.get('/stats', (req, res) => {
     })
 })
 
-app.get('/deactivate', (req, res) => {
+app.get('/unsubscribe', (req, res) => {
   MongoHelper.deactivateEmail(req.query.course, req.query.email)
-  res.sendFile(path.join(__dirname + '/../index.html'))
+  res.send(req.query.email + ' has been unsubscribed from notifications for ' + req.query.course + '. ' +
+    'click <a href="/">here</a> to go back to the homepage.')
+  // res.sendFile(path.join(__dirname + '/../index.html'))
 })
 
 app.post('/submitted', (req, res) => {

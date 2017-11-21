@@ -188,8 +188,8 @@ const getCourse = (course, cb) => {
 }
 const deactivateEmail = (course, email) => {
   db.collection('emails').updateOne(
-    {course: course, email: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
-    {stopEmails: true})
+    {course: course, emails: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
+    {$set: {stopEmails: true}})
 }
 
 const GetEmailsFromCoursesQuery = (docs) => {

@@ -4,7 +4,7 @@ const MongoHelper = require("./MongoHelper")
 const name = 'Penn Course Alert'
 
 // ------ Helper functions ------
-const emailText = (course, signupLink) => {
+const emailText = (course, signupLink, unsubscribeLink) => {
 	return `<h1>Penn Course LMK</h1>
 	Hello,<br><br>
 	The course you requested, ` + course + `, is now open! Hurry and sign up now!<br><br>
@@ -12,7 +12,9 @@ const emailText = (course, signupLink) => {
 	If you did not get the requested course, you can sign up again <a href="` + signupLink + `">here</a>.<br><br>
 	Thank you for using `+name+`!<br><br>
 	Sincerely,<br>
-	<i>The `+ name +`team</i>`
+	<i>The `+ name +`team</i>
+  <p>To unsubscribe from these emails, click this link: `+unsubscribeLink+`</p>
+`
 }
 
 const phoneText = (course, signupLink) => {
@@ -35,7 +37,7 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
   if (process.env.MODE === 'prod') {
     let msgText = ''
     if (isPhoneEmail) {msgText = phoneText(courseCode.replace(/\s/g, ''), signupLink)}
-    else {msgText = emailText(courseName, signupLink)}
+    else {msgText = emailText(courseName, signupLink, 'https://penncoursealert.com/unsubscribe?course='+courseCode+'&email='+email)}
 
     let d = {
       text: msgText,
