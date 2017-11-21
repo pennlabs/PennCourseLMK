@@ -78,10 +78,10 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         line-height: 13px;
     }
     input[type="text"] {
-      width: 250px;
+      width: 300px;
     }
     input[type="tel"] {
-      width: 250px;
+      width: 300px;
     }
     input::-webkit-input-placeholder {
         color: #FAFCFF;
@@ -104,6 +104,10 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     .error-msg {
         color: #DF5D56;
         margin-top: 1rem;
+    }
+    .success-msg {
+      color: #3fdf66;
+      margin-top: 1rem;
     }
     .full-screen {
       height: 90vh;
@@ -163,11 +167,13 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
 
         <div class="row justify-content-center">
           <form class="lmk-text-align-center" action="/submitted" method="POST">
-            <input type="text" placeholder="Email" id="email" name="email">
             <div id="bloodhound"><input type="text" class="typeahead" placeholder="Course" id="course" name="course"></div>
-            <input type="tel" placeholder="Phone Number" id="phone" name="phone"></br>
-            Carrier<br />
+            <input type="text" placeholder="Email" id="email" name="email"><br />
+            <!--<br />Optional: Text Message Notifications<br />-->
+            <input type="tel" placeholder="Phone Number (For SMS Alerts)" id="phone" name="phone"></br>
+            <!--Carrier<br />-->
             <select id="carrier" name="carrier">
+              <option selected disabled="disabled" value="nocarrier">Choose your carrier</option>
               <option value="Verizon">Verizon</option>
               <option value="ATT">AT&amp;T</option>
               <option value="TMobile">T-Mobile</option>
@@ -217,7 +223,10 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
       // first, pre-populate form from local storage
       $('#email').val(localStorage.getItem('lmkEmail'));
       $('#phone').val(localStorage.getItem('lmkPhone'));
-      $('#carrier').val(localStorage.getItem('lmkCarrier'));
+      if (localStorage.getItem('lmkCarrier')) {
+        $('#carrier').val(localStorage.getItem('lmkCarrier'));
+      }
+
       if (localStorage.getItem('lmkNotifications') === 'true') {
         $('#notifications').prop('checked', true);
       }
@@ -245,6 +254,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
             if (info.error === 'courseIsOpen') {
                 $('#description').append("<div class='error-msg'>Error: Course already open</div>");
             }
+        }
+        if ('success' in info) {
+          $('#description').append("<div class='success-msg'>Registration Successful. Thank you for using Penn Course Alert!</div>");
         }
       }
     </script>
