@@ -11,20 +11,24 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
       let backendCourseName = doc.course
-      ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
-        MongoHelper.getCourse(backendCourseName, course => {
-          /*
-            Make sure we only send one email PER time the course is open.
-            Now, we check what the status of the course was the last time we checked its status.
-            If it was false and now it is true, we send the emails. Otherwise,
-          */
-          if (courseInfo.open && (!course || !course.lastStatus)) {
-            let courseEmails = doc.emails
-            callback(courseInfo.name, backendCourseName, courseEmails)
-          }
-          MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
-        })
-
+      ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
+        if (err) {
+          // Don't send email if the registrar can't find an associated course.
+          MongoHelper.updateCourseStats(backendCourseName, false)
+        } else {
+          MongoHelper.getCourse(backendCourseName, course => {
+            /*
+              Make sure we only send one email PER time the course is open.
+              Now, we check what the status of the course was the last time we checked its status.
+              If it was false and now it is true, we send the emails. Otherwise,
+            */
+            if (courseInfo.open && (!course || !course.lastStatus)) {
+              let courseEmails = doc.emails
+              callback(courseInfo.name, backendCourseName, courseEmails)
+            }
+            MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
+          })
+        }
       })
     })
   })
