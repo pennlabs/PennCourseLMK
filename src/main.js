@@ -10,8 +10,8 @@ var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
 const favicon = require('serve-favicon');
 
-Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
-Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
+// Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+// Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
 
 
 app.use(bodyParser.urlencoded({extended: true}))
@@ -63,9 +63,10 @@ app.get('/deactivate', (req, res) => {
 
 app.post('/submitted', (req, res) => {
   // Checks if course is open
-  ApiServer.getCourseInfo(req.body.course, (info) => {
+  // ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
     // console.log(info)
+    let info = {open: true, normalizedCourse: req.body.course}
     if (info.open) {
       res.redirect('/?error=courseIsOpen')
     } else {
@@ -98,5 +99,5 @@ app.post('/submitted', (req, res) => {
       }
       res.redirect('/')
     }
-  })
+  // })
 })
