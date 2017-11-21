@@ -6,6 +6,10 @@ const request = require('request')
 
 const domain = 'https://penncoursealert.com/'
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // -----------Helper functions -------------
 const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
@@ -14,6 +18,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
       ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
         if (err) {
           // Don't send email if the registrar can't find an associated course.
+          console.log(backendCourseName + ' cannot be found.')
           MongoHelper.updateCourseStats(backendCourseName, false)
         } else {
           MongoHelper.getCourse(backendCourseName, course => {
@@ -25,6 +30,8 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
             if (courseInfo.open && (!course || !course.lastStatus)) {
               let courseEmails = doc.emails
               callback(courseInfo.name, backendCourseName, courseEmails)
+            } else {
+              // console.log(backendCourseName + ' is still open.')
             }
             MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
           })

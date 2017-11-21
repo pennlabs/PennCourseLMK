@@ -10,7 +10,7 @@ var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
 const favicon = require('serve-favicon');
 
-Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+Schedule.scheduleJob('30 */2 * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
 
 
