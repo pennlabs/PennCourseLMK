@@ -98,7 +98,7 @@ app.post('/submitted', (req, res) => {
         // MongoHelper.GetEmailsFromCourse(course) // Debugging
         MongoHelper.IncrementCourseCount(course)
       }
-      res.redirect('/')
+      res.redirect('/?success')
     }
   })
 })
