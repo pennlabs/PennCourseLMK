@@ -6,25 +6,36 @@ const request = require('request')
 
 const domain = 'https://penncoursealert.com/'
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // -----------Helper functions -------------
 const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     docs.forEach((doc) => {
       let backendCourseName = doc.course
-      ApiServer.getCourseInfo(backendCourseName, (courseInfo) => {
-        MongoHelper.getCourse(backendCourseName, course => {
-          /*
-            Make sure we only send one email PER time the course is open.
-            Now, we check what the status of the course was the last time we checked its status.
-            If it was false and now it is true, we send the emails. Otherwise,
-          */
-          if (courseInfo.open && (!course || !course.lastStatus)) {
-            let courseEmails = doc.emails
-            callback(courseInfo.name, backendCourseName, courseEmails)
-          }
-          MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
-        })
-
+      ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
+        if (err) {
+          // Don't send email if the registrar can't find an associated course.
+          console.log(backendCourseName + ' cannot be found.')
+          MongoHelper.updateCourseStats(backendCourseName, false)
+        } else {
+          MongoHelper.getCourse(backendCourseName, course => {
+            /*
+              Make sure we only send one email PER time the course is open.
+              Now, we check what the status of the course was the last time we checked its status.
+              If it was false and now it is true, we send the emails. Otherwise,
+            */
+            if (courseInfo.open && (!course || !course.lastStatus)) {
+              let courseEmails = doc.emails
+              callback(courseInfo.name, backendCourseName, courseEmails)
+            } else {
+              // console.log(backendCourseName + ' is still open.')
+            }
+            MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
+          })
+        }
       })
     })
   })
@@ -69,7 +80,7 @@ const createSignupLink = (course, email, phoneEmail, callback) => {
 const SendEmailsToOpenCourses = () => {
   FindEmailsAndCoursesWithOpenings((courseName, backendCourseName, courseEmails) => {
     courseEmails.forEach((emails) => {
-      console.log(emails)
+      // console.log(emails)
       let signupLink = ''
       // if we only have one email, figure out which one and create the appropriate sign up link
       if (emails.length === 1) {

@@ -30,7 +30,7 @@ const getCourseInfo = (course, callback) => {
         // max_enrollment vs max_enrollment_crosslist
         const max_enrollment = c.max_enrollment
 
-        callback({'open': status, 'normalizedCourse': c.section_id_normalized, 'name': name, 'max_enrollment': max_enrollment})
+        callback({'open': status, 'normalizedCourse': c.section_id_normalized, 'name': name, 'max_enrollment': max_enrollment}, null)
       } else {
         callback(null, 'This course doesnt exist!')
       }

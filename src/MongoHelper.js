@@ -171,7 +171,7 @@ const updateEmailOptions = (course, email) => {
   const q = {course: course, emails: email, sendOnlyOne: true, stopEmails: false, semester: GetCurrentSemester()}
   db.collection('emails').updateOne(
     q,
-    {$set: {stopEmails: true}}).then(x => console.log(x.result))
+    {$set: {stopEmails: true}})
 }
 
 const updateCourseStats = (course, isOpen) => {
@@ -188,8 +188,8 @@ const getCourse = (course, cb) => {
 }
 const deactivateEmail = (course, email) => {
   db.collection('emails').updateOne(
-    {course: course, email: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
-    {stopEmails: true})
+    {course: course, emails: email, sendOnlyOne: false, stopEmails: false, semester: GetCurrentSemester()},
+    {$set: {stopEmails: true}})
 }
 
 const GetEmailsFromCoursesQuery = (docs) => {
@@ -216,6 +216,7 @@ const GetEmailsFromCoursesQuery = (docs) => {
 const collectEmailsToSend = (callback) => {
   // Only query emails for the current semester where they should still be sent emails.
   db.collection('emails').find({stopEmails: false, semester: GetCurrentSemester()}).toArray((err, docs) => {
+    console.log(docs.length)
     if (err) console.log (err)
     else {
       let r = GetEmailsFromCoursesQuery(docs)

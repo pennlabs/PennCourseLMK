@@ -10,7 +10,7 @@ var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
 const favicon = require('serve-favicon');
 
-// Schedule.scheduleJob('30 * * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+// Schedule.scheduleJob('30 */5 * * * *', ScheduledJobs.SendEmailsToOpenCourses);
 // Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
 
 
@@ -56,9 +56,11 @@ app.get('/stats', (req, res) => {
     })
 })
 
-app.get('/deactivate', (req, res) => {
+app.get('/unsubscribe', (req, res) => {
   MongoHelper.deactivateEmail(req.query.course, req.query.email)
-  res.sendFile(path.join(__dirname + '/../index.html'))
+  res.send(req.query.email + ' has been unsubscribed from notifications for ' + req.query.course + '. ' +
+    'click <a href="/">here</a> to go back to the homepage.')
+  // res.sendFile(path.join(__dirname + '/../index.html'))
 })
 
 app.post('/submitted', (req, res) => {
@@ -87,8 +89,8 @@ app.post('/submitted', (req, res) => {
       // check if phone number & carrier are present and, if so, add that
       // course to phone number associated email
       if (req.body.phone && req.body.carrier) {
-        console.log(req.body.carrier);
-        console.log(req.body.phone);
+        // console.log(req.body.carrier);
+        // console.log(req.body.phone);
         let phoneEmail = Phone.createTextableEmail(req.body.phone, req.body.carrier);
         emails.push(phoneEmail)
       }
