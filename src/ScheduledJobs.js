@@ -10,11 +10,24 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function processArray(items, process) {
+  let todo = items.concat();
+
+  setTimeout(function() {
+    if (todo.length > 0)
+      process(todo.shift());
+    if(todo.length > 0) {
+      setTimeout(arguments.callee, 25);
+    }
+  }, 300);
+}
+
 // -----------Helper functions -------------
 const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
-    docs.forEach((doc) => {
+    processArray(docs, (doc) => {
       let backendCourseName = doc.course
+      console.log('starting request for ' + backendCourseName)
       ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
         if (err) {
           // Don't send email if the registrar can't find an associated course.
@@ -31,7 +44,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
               let courseEmails = doc.emails
               callback(courseInfo.name, backendCourseName, courseEmails)
             } else {
-              // console.log(backendCourseName + ' is still open.')
+              console.log(backendCourseName + ' will not send emails.')
             }
             MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
           })
