@@ -27,7 +27,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
   MongoHelper.GetAllCoursesAndEmails((docs) => {
     processArray(docs, (doc) => {
       let backendCourseName = doc.course
-      console.log('starting request for ' + backendCourseName)
+      // console.log('starting request for ' + backendCourseName)
       ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
         if (err) {
           // Don't send email if the registrar can't find an associated course.
@@ -44,7 +44,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
               let courseEmails = doc.emails
               callback(courseInfo.name, backendCourseName, courseEmails)
             } else {
-              console.log(backendCourseName + ' will not send emails.')
+              // console.log(backendCourseName + ' will not send emails.')
             }
             MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
           })
