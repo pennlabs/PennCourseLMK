@@ -31,7 +31,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
       ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
         if (err) {
           // Don't send email if the registrar can't find an associated course.
-          console.log(backendCourseName + ' cannot be found.')
+          console.log(err.message)
           MongoHelper.updateCourseStats(backendCourseName, false)
         } else {
           MongoHelper.getCourse(backendCourseName, course => {

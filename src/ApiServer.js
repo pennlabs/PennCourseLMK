@@ -11,28 +11,64 @@ registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
 const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
+const searchCourse = (params, callback) => {
+  const options = {
+    url: 'https://esb.isc-seo.upenn.edu/8091/open_data/course_section_search',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization-Bearer': API_USERNAME,
+      'Authorization-Token': API_PASSWORD
+    },
+    method: "GET",
+    qs: params
+  }
+
+  request(options, (err, resp, body) => {
+    if (err) {
+      callback(null, err)
+    } else {
+      try {
+        let responseBody = JSON.parse(body)
+        let result = responseBody['result_data']
+        callback(result, null)
+      } catch(e) {
+        callback(null, e)
+      }
+    }
+  })
+}
+
 // Returns {open: boolean, name: String}
 const getCourseInfo = (course, callback) => {
   return (
-    registrar.search({
+    searchCourse({
       'course_id': course,
       'term': getCurrentSemester()
-    }, (result) => {
-      const c = result[0]
-      if (c) {
-        // console.log(c)
-        const name = c.section_id_normalized.replace(/\s/g, '') + ": " + c.section_title
-        const status = !c.is_closed
-        const number = c.course_number
-        const section = c.section_number
-
-        const crosslistings = c.crosslistings
-        // max_enrollment vs max_enrollment_crosslist
-        const max_enrollment = c.max_enrollment
-
-        callback({'open': status, 'normalizedCourse': c.section_id_normalized, 'name': name, 'max_enrollment': max_enrollment}, null)
+    }, (result, err) => {
+      if (err) {
+        callback(null, err)
       } else {
-        callback(null, 'This course doesnt exist!')
+        const c = result[0]
+        if (c) {
+          // console.log(c)
+          const name = c.section_id_normalized.replace(/\s/g, '') + ": " + c.section_title
+          const status = !c.is_closed
+          const number = c.course_number
+          const section = c.section_number
+
+          const crosslistings = c.crosslistings
+          // max_enrollment vs max_enrollment_crosslist
+          const max_enrollment = c.max_enrollment
+
+          callback({
+            'open': status,
+            'normalizedCourse': c.section_id_normalized,
+            'name': name,
+            'max_enrollment': max_enrollment
+          }, null)
+        } else {
+          callback(null, {message: course + ' does not exist!'})
+        }
       }
     })
   )
