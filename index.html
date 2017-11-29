@@ -254,6 +254,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
             if (info.error === 'courseIsOpen') {
                 $('#description').append("<div class='error-msg'>Error: Course already open</div>");
             }
+            else if (info.error === 'backend') {
+              $('#description').append("<div class='error-msg'>Error: The Penn registrar has returned an error. Please try again later. We're sorry for the inconvenience!</div>");
+            }
         }
         if ('success' in info) {
           $('#description').append("<div class='success-msg'>Registration Successful. Thank you for using Penn Course Alert!</div>");

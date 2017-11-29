@@ -68,7 +68,9 @@ app.post('/submitted', (req, res) => {
   ApiServer.getCourseInfo(req.body.course, (info) => {
     let testing = true
     // console.log(info)
-    if (info.open) {
+    if (!info) {
+      res.redirect('/?error=backend')
+    } else if (info.open) {
       res.redirect('/?error=courseIsOpen')
     } else {
       // IMPORTANT: Make sure that course code is normalized before inserting into database.
