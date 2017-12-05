@@ -27,6 +27,7 @@ const searchCourse = (params, callback) => {
     if (err) {
       callback(null, err)
     } else {
+      console.log(body)
       try {
         let responseBody = JSON.parse(body)
         let result = responseBody['result_data']
