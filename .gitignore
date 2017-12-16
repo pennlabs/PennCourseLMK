@@ -156,4 +156,6 @@ ENV/
 .ropeproject
 
 # Other
+*.swp
+*.swo
 data
