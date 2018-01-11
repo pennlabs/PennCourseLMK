@@ -10,9 +10,11 @@ var Schedule = require('node-schedule')
 const Phone = require('./phone.js');
 const favicon = require('serve-favicon');
 
-Schedule.scheduleJob('0 */10 * * * *', ScheduledJobs.SendEmailsToOpenCourses);
-Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
-
+if (process.env.RUN_CRON === 'YES') {
+  console.log("Crons enabled!")
+  Schedule.scheduleJob('0 */10 * * * *', ScheduledJobs.SendEmailsToOpenCourses);
+  Schedule.scheduleJob('0 0 0 15 * *', ScheduledJobs.importCourses) // import courses from registrar once per month
+}
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(favicon(path.join(__dirname, '../favicon.png')));
