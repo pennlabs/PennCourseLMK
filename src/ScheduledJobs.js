@@ -32,6 +32,7 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
         if (err) {
           // Don't send email if the registrar can't find an associated course.
           console.log(err.message)
+          // THIS IS WHY PEOPLE ARE SPAMMED: flip flop between error and open
           MongoHelper.updateCourseStats(backendCourseName, false)
         } else {
           MongoHelper.getCourse(backendCourseName, course => {
