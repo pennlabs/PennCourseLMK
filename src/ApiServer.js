@@ -41,7 +41,7 @@ const createRequestQueue = (key, secret, reqDelay) => {
   }
 }
 
-const makeRequest = createRequestQueue(API_USERNAME, API_PASSWORD, 700)
+const makeRequest = createRequestQueue(API_USERNAME, API_PASSWORD, process.env.RATE_DELAY || 700)
 
 const searchCourse = (params, callback) => {
   makeRequest(params, (err, resp, body) => {
