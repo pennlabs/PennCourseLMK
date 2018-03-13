@@ -11,19 +11,40 @@ registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
 const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
-const searchCourse = (params, callback) => {
-  const options = {
-    url: 'https://esb.isc-seo.upenn.edu/8091/open_data/course_section_search',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization-Bearer': API_USERNAME,
-      'Authorization-Token': API_PASSWORD
-    },
-    method: "GET",
-    qs: params
-  }
+const createRequestQueue = (key, secret, reqDelay) => {
+  let requestQueue = []
 
-  request(options, (err, resp, body) => {
+  const intervalId = setInterval(() => {
+    if (requestQueue.length > 0) {
+      const r = requestQueue.shift();
+      const options = {
+        url: 'https://esb.isc-seo.upenn.edu/8091/open_data/course_section_search',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization-Bearer': key,
+          'Authorization-Token': secret
+        },
+        method: "GET",
+        qs: r.query
+      }
+
+      console.log(r.query);
+
+      request(options, r.callback)
+    } else {
+      // console.log('no request')
+    }
+  }, reqDelay)
+
+  return (req, callback) => {
+    requestQueue.push({query: req, callback: callback})
+  }
+}
+
+const makeRequest = createRequestQueue(API_USERNAME, API_PASSWORD, 700)
+
+const searchCourse = (params, callback) => {
+  makeRequest(params, (err, resp, body) => {
     if (err) {
       callback(null, err)
     } else {
@@ -75,35 +96,38 @@ const getCourseInfo = (course, callback) => {
   )
 }
 
-const getAllCourseInfo = (dept, callback) => {
-  return (
-    registrar.search({
-      'course_id': dept,
-      'term': '2017C'
-    }, (result) => {
-      const c = result
-      if (c) {
-        let b = []
-        c.forEach( (element) => {
-          const name = element.section_id_normalized + ": " + element.section_title
-          const status = !element.is_closed
-          const number = element.course_number
-          const section = element.section_number
-          const obj =  {'open': status, 'name': name, 'number': number, 'section': section}
-          b.push(obj)
-        })
+
+
+const getAllCourseInfo = (results, pageNumber, callback) => {
+  makeRequest({
+    term: getCurrentSemester(),
+    course_id: '',
+    page_number: pageNumber
+    }, (err, resp, body) => {
+      if (err) {
+        callback(null, err)
       } else {
-        console.log('This course doesnt exist!')
-      }
-      callback(b)
-    })
-  )
+        try {
+          let responseBody = JSON.parse(body)
+          let nextPage = responseBody['service_meta']['next_page_number']
+          let newResults = results.concat(responseBody['result_data'])
+          if (nextPage > pageNumber) {
+            getAllCourseInfo(newResults, nextPage, callback)
+          }
+          else
+            callback(newResults, null);
+        } catch(e) {
+          callback(null, e)
+        }
+    }
+  })
+
 }
 
 const insertCoursesToMongo = (callback) => {
   console.log('starting course search...')
   // Search all courses for the current semester
-  registrar.search({term: getCurrentSemester(), course_id: ''}, courses => {
+  getAllCourseInfo([], 1, courses => {
     console.log('courses query complete!')
     for (let j = 0; j < courses.length; j++) {
       if (courses[j])
@@ -113,34 +137,9 @@ const insertCoursesToMongo = (callback) => {
   })
 }
 
-const fetchDepartments = (callback) => {
-  request(BASE_URL, (err, res, body) => {
-    if(err) {
-      console.log(err)
-    }
-    let b = []
-    JSON.parse(body)['result']['values'].forEach( (element) => {
-      b.push(element['id'])
-    })
-    callback(b)
-  })
-}
-
-const getAllCourses = (callback) => {
-  let courses = {}
-  fetchDepartments( (depts) => {
-    depts.forEach( (d) => {
-      getAllCourseInfo(d, (e) => courses[d] = e)
-    })
-  })
-  callback(courses)
-}
 
 
 module.exports = {
   getCourseInfo: getCourseInfo,
-  getAllCourseInfo: getAllCourseInfo,
-  fetchDepartments: fetchDepartments,
-  getAllCourses: getAllCourses,
   insertCoursesToMongo: insertCoursesToMongo,
 }
