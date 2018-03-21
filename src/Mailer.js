@@ -23,9 +23,9 @@ const phoneText = (course, signupLink) => {
 }
 
 const server = email.server.connect({
-    user: 'penncoursealert@gmail.com',
-    password: process.env.LMK_PASSWORD,
-    host: 'smtp.gmail.com',
+    user: process.env.SMTP_USERNAME,
+    password: process.env.SMTP_PASSWORD,
+    host: 'email-smtp.us-east-1.amazonaws.com',
     tls: true,
     port: 587
 });
@@ -43,10 +43,10 @@ const sendEmail = (courseName, courseCode, email, signupLink, isPhoneEmail, call
       text: msgText,
       attachment: [{data: msgText, alternative: true}],
       to: email,
-      from: 'PennCourseAlert <penncourselmk@gmail.com>'
+      from: 'PennCourseAlert <team@penncoursealert.com>'
     }
     if (!isPhoneEmail) {
-      d.from = 'Penn Course Alert <penncourselmk@gmail.com>'
+      d.from = 'Penn Course Alert <team@penncoursealert.com>'
       d.subject = courseName + ' is now open!'
     }
 

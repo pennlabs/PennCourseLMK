@@ -28,27 +28,33 @@ const FindEmailsAndCoursesWithOpenings = (callback) => {
     processArray(docs, (doc) => {
       let backendCourseName = doc.course
       // console.log('starting request for ' + backendCourseName)
-      ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
-        if (err) {
-          // Don't send email if the registrar can't find an associated course.
-          console.log(backendCourseName + ' cannot be found.')
-          MongoHelper.updateCourseStats(backendCourseName, false)
-        } else {
-          MongoHelper.getCourse(backendCourseName, course => {
-            /*
-              Make sure we only send one email PER time the course is open.
-              Now, we check what the status of the course was the last time we checked its status.
-              If it was false and now it is true, we send the emails. Otherwise,
-            */
-            if (courseInfo.open && (!course || !course.lastStatus)) {
-              let courseEmails = doc.emails
-              callback(courseInfo.name, backendCourseName, courseEmails)
-            } else {
-              // console.log(backendCourseName + ' will not send emails.')
-            }
-            MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
-          })
-        }
+      MongoHelper.getCourse(backendCourseName, course => {
+        ApiServer.getCourseInfo(backendCourseName, (courseInfo, err) => {
+          if (err) {
+            // Don't send email if the registrar can't find an associated course.
+            console.log(err.message)
+            // if there's been an error, updateCourseStats to keep most recent date but
+            // persist the previous status, so if the course was open we don't spam people.
+            if (course)
+              MongoHelper.updateCourseStats(backendCourseName, course.lastStatus)
+            else
+              MongoHelper.updateCourseStats(backendCourseName, false);
+          } else {
+              /*
+                Make sure we only send one email PER time the course is open.
+                Now, we check what the status of the course was the last time we checked its status.
+                If it was false and now it is true, we send the emails. Otherwise,
+              */
+              if (courseInfo.open && (!course || !course.lastStatus)) {
+                let courseEmails = doc.emails
+                callback(courseInfo.name, backendCourseName, courseEmails)
+              } else {
+                // console.log(backendCourseName + ' will not send emails.')
+              }
+              MongoHelper.updateCourseStats(backendCourseName, courseInfo.open)
+
+          }
+        })
       })
     })
   })
