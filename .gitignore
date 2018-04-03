@@ -157,3 +157,4 @@ ENV/
 
 # Other
 data
+.DS_Store

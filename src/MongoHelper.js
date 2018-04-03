@@ -7,9 +7,6 @@ if (PRODUCTION_MODE) {
   '@ds155080.mlab.com:55080/penncourselmk'
 }
 
-// TODO: Connection Pooling
-// ------ Helper functions -------
-
 // Get current semester code
 const GetCurrentSemester = () => {
   let d = new Date()
@@ -35,7 +32,7 @@ const GetCurrentSemester = () => {
 
 }
 
-let db = null
+let db = null // db connection. We let the MongoDB library handle collection pooling
 
 const connectDB = (callback) => {
   MongoClient.connect(url, (err, db1) => {
@@ -46,66 +43,6 @@ const connectDB = (callback) => {
   })
 }
 
-
-
-// Inserts doc into the set with its key if exists, adds doc if doesn't exist
-const insertDocuments = (doc, collection, callback) => {
-  const bulk = collection.initializeUnorderedBulkOp()
-  const key = Object.keys(doc)[0]
-  const val = doc[key]
-  bulk.find({[key] : {$exists: true}}).upsert().updateOne({
-    $addToSet: {[key]:val}
-  })
-  bulk.execute()
-  callback()
-}
-
-const findDocuments = (key, collection, callback) => {
-  collection.find({[key]: {$exists: true}}).toArray((err, docs) => {
-    if (err) console.log(err)
-    console.log("Found the following records")
-    console.log(docs)
-    callback(docs)
-  })
-}
-
-const removeDocument = (key, collection, callback) => {
-  collection.deleteAll({[key] : {$exists: true}}, (err, result) => {
-    if (err) console.log(err)
-    callback(result)
-  })
-}
-
-const findAllDocuments = (db, callback) => {
-  const collection = db.collection('emails')
-  collection.find().toArray((err, docs) => {
-    if (err) console.log(err)
-    callback(docs)
-  })
-}
-
-const removeAllFromArrayField = (key, db, callback) => {
-  const collection = db.collection('emails')
-  collection.update(
-    {[key]: {$exists: true}},
-    {$set: { [key] : [] }}
-  ).catch((e) => {
-    console.log(e)
-  });
-}
-// Relaces the value of the document with given key with the new val
-const replaceDocument = (key, val, collection, callback) => {
-  collection.replaceOne(
-    {[key] : {$exists: true}},
-    {[key] : val},
-    {upsert: true},
-    (err, result) => {
-      if (err) console.log(err)
-      callback(result)
-    })
-}
-
-// ------ Public functions --------
 const CreateCollections = () => {
   db.createCollection('emails')
   db.createCollection('analytics')
@@ -121,18 +58,6 @@ const AddEmailsToCourse = (course, emails, perpetual) => {
       $inc: {signUps: 1} // document counter to track number of sign ups for user
     },
     {upsert: true})
-}
-
-const GetEmailsFromCourse = (course, callback) => {
-  db.collection('emails').find({course: course}).toArray((err, docs) => {
-    let es = docs.map(x => x.email)
-    console.log(es)
-    callback && callback(es)
-  })
-}
-
-const RemoveCourse = (course) => {
-  removeDocument(course, db.collection('emails'), () => {})
 }
 
 // Increments the number of times a course has been requested
@@ -227,10 +152,6 @@ const collectEmailsToSend = (callback) => {
   })
 }
 
-const RemoveAllEmailsFromCourse = (course, callback) => {
-  removeAllFromArrayField(course, db, () => { })
-}
-
 const insertCourse = (course) => {
   let c = {
     section_id: course.section_id_normalized.replace(/\s/g, ''),
@@ -292,26 +213,15 @@ const getCourses = (section, callback) => {
   })
 }
 
-const updateDept = (dept) => {
-  db.collection('departments').updateOne(
-    {dept: dept, semester: GetCurrentSemester()},
-    {$set: {dept: dept, semester: GetCurrentSemester(), lastUpdated: new Date()}},
-    {upsert: true})
-}
-
 module.exports = {
   CreateCollections: CreateCollections,
   AddEmailsToCourse: AddEmailsToCourse,
-  GetEmailsFromCourse: GetEmailsFromCourse,
-  RemoveCourse: RemoveCourse,
   GetAllCoursesAndEmails: collectEmailsToSend,
-  RemoveAllEmailsFromCourse: RemoveAllEmailsFromCourse,
   IncrementCourseCount: IncrementCourseCount,
   updateEmailOptions: updateEmailOptions,
   GetCurrentSemester: GetCurrentSemester,
   findMaxCourseCount: findMaxCourseCount,
   insertCourse : insertCourse,
-  updateDept: updateDept,
   updateCourseStats: updateCourseStats,
   getCourse: getCourse,
   deactivateEmail: deactivateEmail,
