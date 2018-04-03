@@ -116,7 +116,9 @@ const AddEmailsToCourse = (course, emails, perpetual) => {
     { emails: emails, course: course, semester: GetCurrentSemester(),
       sendOnlyOne: perpetual,
       stopEmails: false,
-      signupSuccessful: null
+      signupSuccessful: null,
+      $push: {date: new Date()}, // array to track the sign up dates
+      $inc: {signUps: 1} // document counter to track number of sign ups for user
     },
     {upsert: true})
 }
