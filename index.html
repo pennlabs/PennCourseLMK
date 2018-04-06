@@ -164,14 +164,42 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         <div class="row justify-content-center">
             <p id="description" class="lmk-text-align-center">Get notified when a course opens up by text and email</p>
         </div>
+        <!-- Resubscribe and unsubscribe modal -->
+        <div class="modal" id="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Penn Course Alert</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Would you like to keep receiving notifications?</p>
+              </div>
+              <button type="button" class="btn btn-primary" onClick='resubmit()'>Resubscribe</button>
+              <button type="button" id="unsubscribe" class="btn btn-default" onClick='resubscribe()'>Unsubscribe</button>
+              <script>
+                function resubmit() {
+                  $('#submit_form').submit();
+                }
+                function resubscribe() {
+                  const info = parseURL(window.location.href);
+                  window.location.href = "/unsubscribe?email="+info.email+"&course="+info.course;
+                }
+              </script>
+              <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
 
+            </div>
+          </div>
+        </div>
         <div class="row justify-content-center">
-          <form class="lmk-text-align-center" action="/submitted" method="POST">
+          <form id="submit_form" class="lmk-text-align-center" action="/submitted" method="POST">
             <div id="bloodhound"><input type="text" class="typeahead" placeholder="Course" id="course" name="course" required></div>
             <input type="text" placeholder="Email" id="email" name="email" required><br />
             <!--<br />Optional: Text Message Notifications<br />-->
             <input type="tel" placeholder="Phone Number (For SMS Alerts)" id="phone" name="phone"></br>
-            <!--Carrier<br />-->
+            <!--Carrier<br /> action="/submitted" method="POST">-->
             <select id="carrier" name="carrier">
               <option selected disabled="disabled" value="nocarrier">Choose your carrier</option>
               <option value="Verizon">Verizon</option>
@@ -183,6 +211,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
             <input type="checkbox" placeholder="notifications" id="notifications" name="notifications"><label for="notifications">Keep Me Notified</label><br>
             <button type="submit">Submit</button>
           </form>
+          
         </div>
       </div>
     </div>
@@ -230,6 +259,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
       if (localStorage.getItem('lmkNotifications') === 'true') {
         $('#notifications').prop('checked', true);
       }
+
       // if URL contains '?', then only pre-populate form from parsed URL element
       // if it exists (in order to not overwrite local storage populated fields
       // with undefined)
@@ -251,7 +281,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           $('#notifications').prop('checked', true);
         }
         if ('error' in info) {
-            if (info.error === 'courseIsOpen') {
+        	if (info.error === 'courseIsOpen') {
                 $('#description').append("<div class='error-msg'>Error: Course already open</div>");
             }
             else if (info.error === 'backend') {
@@ -260,6 +290,14 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         }
         if ('success' in info) {
           $('#description').append("<div class='success-msg'>Registration Successful. Thank you for using Penn Course Alert!</div>");
+        }
+        if ('unsub' in info) {
+          $('#description').append('<div class="success-msg">Unsubscribe Successful. Thank you for using Penn Course Alert!</div>')
+        }
+        if ('action' in info) {
+          if (info.action === 'resubscribe') {
+            $('#modal').modal('show')
+          }
         }
       }
     </script>

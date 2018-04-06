@@ -19,7 +19,7 @@ const emailText = (course, signupLink, unsubscribeLink) => {
 
 const phoneText = (course, signupLink) => {
   return course + ' is now open! Register on Penn InTouch: http://tiny.cc/lmk\n ' +
-    'If you didn\'t get the course, sign up again here: ' + signupLink
+    'Change your notification preferences here: ' + signupLink
 }
 
 const server = email.server.connect({
