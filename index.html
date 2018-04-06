@@ -169,7 +169,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Welcome to Penn Course Alert</h5>
+                <h5 class="modal-title">Penn Course Alert</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -177,20 +177,19 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
               <div class="modal-body">
                 <p>Would you like to keep receiving notifications?</p>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onClick='resubmit()'>Resubscribe</button>
-                <button type="button" id="unsubscribe" class="btn btn-primary" onClick='resubscribe()'>Unsubscribe</button>
-                <script>
-                  function resubmit() {
-                    $('#submit_form').submit();
-                  }
-                  function resubscribe() {
-                    const info = parseURL(window.location.href);
-                    window.location.href = "http://www.penncoursealert.com/unsubscribe?email="+info.email+"&course="+info.course;
-                  }
-                </script>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+              <button type="button" class="btn btn-primary" onClick='resubmit()'>Resubscribe</button>
+              <button type="button" id="unsubscribe" class="btn btn-default" onClick='resubscribe()'>Unsubscribe</button>
+              <script>
+                function resubmit() {
+                  $('#submit_form').submit();
+                }
+                function resubscribe() {
+                  const info = parseURL(window.location.href);
+                  window.location.href = "/unsubscribe?email="+info.email+"&course="+info.course;
+                }
+              </script>
+              <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+
             </div>
           </div>
         </div>
@@ -292,8 +291,11 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         if ('success' in info) {
           $('#description').append("<div class='success-msg'>Registration Successful. Thank you for using Penn Course Alert!</div>");
         }
+        if ('unsub' in info) {
+          $('#description').append('<div class="success-msg">Unsubscribe Successful. Thank you for using Penn Course Alert!</div>')
+        }
         if ('action' in info) {
-          if (info.action == 'resubscribe') {
+          if (info.action === 'resubscribe') {
             $('#modal').modal('show')
           }
         }

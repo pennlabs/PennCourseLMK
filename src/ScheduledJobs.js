@@ -74,7 +74,7 @@ const createSignupLink = (course, email, phoneEmail, callback) => {
     linkCarrier = '&carrier=' + split[1]
   }
 
-  let link = domain + '?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier
+  let link = domain + '?' + 'course=' + course.replace(/ /g, '') + linkEmail + linkPhone + linkCarrier + '&action=resubscribe'
   let options = {
     uri: 'https://www.googleapis.com/urlshortener/v1/url',
     qs: {key: process.env.URL_KEY},
