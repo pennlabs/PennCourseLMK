@@ -28,7 +28,7 @@ const createRequestQueue = (key, secret, reqDelay) => {
         qs: r.query
       }
 
-      console.log(r.query);
+      // console.log(r.query);
 
       request(options, r.callback)
     } else {

@@ -50,12 +50,17 @@ const CreateCollections = () => {
 
 const AddEmailsToCourse = (course, emails, perpetual) => {
   db.collection('emails').updateOne({emails: emails, course: course, semester: GetCurrentSemester()},
-    { emails: emails, course: course, semester: GetCurrentSemester(),
-      sendOnlyOne: perpetual,
-      stopEmails: false,
-      signupSuccessful: null,
+    {
+      $set: {
+        emails: emails,
+        course: course,
+        semester: GetCurrentSemester(),
+        sendOnlyOne: perpetual,
+        stopEmails: false,
+        signupSuccessful: null
+      },
       $push: {date: new Date()}, // array to track the sign up dates
-      $inc: {signUps: 1} // document counter to track number of sign ups for user
+      $inc: {signUps: 1}// document counter to track number of sign ups for user
     },
     {upsert: true})
 }
