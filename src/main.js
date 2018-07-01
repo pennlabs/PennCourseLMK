@@ -102,5 +102,5 @@ app.post('/submitted', (req, res) => {
       }
       res.redirect('/?success')
     }
-  })
+  }, true)
 })

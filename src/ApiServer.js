@@ -7,11 +7,15 @@ Registrar = api.Registrar
 const API_USERNAME = process.env.PENN_SDK_USERNAME
 const API_PASSWORD = process.env.PENN_SDK_PASSWORD
 
+// Secondary API credentials for front-end requests
+const SEC_API_USERNAME = process.env.PENN_SDK_USERNAME_SEC
+const SEC_API_PASSWORD = process.env.PENN_SDK_PASSWORD_SEC
+
 registrar = new Registrar(API_USERNAME, API_PASSWORD)
 
 const BASE_URL = 'http://api.penncoursereview.com/v1/depts?token=public'
 
-const createRequestQueue = (key, secret, reqDelay) => {
+const createRequestQueue = (key, secret, reqDelay, queueName) => {
   let requestQueue = []
 
   const intervalId = setInterval(() => {
@@ -41,10 +45,15 @@ const createRequestQueue = (key, secret, reqDelay) => {
   }
 }
 
-const makeRequest = createRequestQueue(API_USERNAME, API_PASSWORD, process.env.RATE_DELAY || 700)
+const makeRequest = createRequestQueue(API_USERNAME, API_PASSWORD, process.env.RATE_DELAY || 700, "backend")
+const makeFrontendRequest = createRequestQueue(SEC_API_USERNAME, SEC_API_PASSWORD, process.env.RATE_DELAY || 700, "frontend")
 
-const searchCourse = (params, callback) => {
-  makeRequest(params, (err, resp, body) => {
+const searchCourse = (params, callback, frontend) => {
+  let mkReq = makeRequest
+  if (frontend) {
+    mkReq = makeFrontendRequest
+  }
+  mkReq(params, (err, resp, body) => {
     if (err) {
       callback(null, err)
     } else {
@@ -61,7 +70,7 @@ const searchCourse = (params, callback) => {
 }
 
 // Returns {open: boolean, name: String}
-const getCourseInfo = (course, callback) => {
+const getCourseInfo = (course, callback, frontend) => {
   return (
     searchCourse({
       'course_id': course,
@@ -92,7 +101,7 @@ const getCourseInfo = (course, callback) => {
           callback(null, {message: course + ' does not exist!'})
         }
       }
-    })
+    }, frontend)
   )
 }
 
