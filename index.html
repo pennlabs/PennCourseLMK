@@ -36,7 +36,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
       body {
         background-color: #fafcff;
         position: relative;
-        padding-bottom:190px;
+        padding-bottom: 150px;
       }
       .input {
         border-style: hidden;
@@ -60,10 +60,16 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
       .field {
         padding-bottom:0.7rem;
       }
+      .wrapper {
+        max-width:360px;
+        margin: 0 auto;
+        padding: 0;
+      }
+
     </style>
   </head>
   <body>
-    <section class="section">
+    <section class="section is-block-mobile">
       <div class="container has-text-centered">
         <div class="level" style="margin-bottom:0.5rem">
           <div class="level-item">
@@ -110,14 +116,14 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           </div>
         </div>
 
-      <div class="container has-text-centered is-block-mobile" style="margin-top:3.5rem; width: 360px">
-        <form id="submit_form" class="lmk-text-align-center" action="/submitted" method="POST">
-          <div class="field" id="bloodhound">
-            <div class="control">
+      <div class="container has-text-centered is-block-mobile wrapper" style="margin-top:3.5rem" id="wrapper">
+        <form id="submit_form" action="/submitted" method="POST">
+          <div class="field" id="bloodhound" class="input-wrapper">
+            <div class="control" >
               <input class="input is-medium typeahead" type="text" placeholder="Course" id="course" name="course" required>
             </div>
           </div>
-          <div class="field">
+          <div class="field" class="input-wrapper">
             <div class="control">
               <input class="input is-medium" type="text" placeholder="Email" id="email" name="email" required>
             </div>
@@ -129,8 +135,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
               <!--Carrier<br /> action="/submitted" method="POST">-->
             </div>
           </div>
-          <div class="field is-grouped level">
-            <div class="control">
+          <div class="level">
+          <div class="field level-left">
+            <div class="control level-item">
               <div class="select">
                 <select id="carrier" name="carrier">
                   <option selected disabled="disabled" value="nocarrier">Choose your carrier</option>
@@ -142,11 +149,12 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
                 </select><br>
               </div>
             </div>
-            <div class="control has-text-right">
+            <div class="control has-text-right level-item">
               <label class="checkbox">
                 <input type="checkbox" placeholder="notifications" id="notifications" name="notifications"><label for="notifications"> Keep me notified</label>
               </label>
             </div>
+          </div>
           </div>
           <div class="control has-text-centered">
             <a class="button is-info" type="submit">Submit</a>
@@ -161,6 +169,8 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         <div class="content has-text-centered">
           <p style="font-size:0.8rem">
           Made with <span class="icon is-small" style="color:#F56F71"><i class="fa fa-heart"></i></span> by <a href="http://pennlabs.org" target="_blank">Penn Labs</a>
+          </p>
+        </div>
       </div>
     </footer>
 
