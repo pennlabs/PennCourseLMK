@@ -34,7 +34,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     </script>
     <style>
       body {
-        background-color: #fafcff;;
+        background-color: #fafcff;
+        position: relative;
+        padding-bottom:190px;
       }
       .input {
         border-style: hidden;
@@ -47,12 +49,11 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
       .footer {
         background-color: #ffffff;
         box-shadow: 0px 0px 8px 1px #F1F3F6;
+        position: absolute;
+        width: 100%;
+        bottom: 0px;
       }
-      html, body {
-        margin: 0; 
-        height: 100%; 
-        overflow: hidden
-      }
+
       .title, .subtitle, p, label {
         color: #4a4a4a;
       }
@@ -62,7 +63,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     </style>
   </head>
   <body>
-    <section class="section is-inline-mobile">
+    <section class="section">
       <div class="container has-text-centered">
         <div class="level" style="margin-bottom:0.5rem">
           <div class="level-item">
@@ -109,7 +110,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           </div>
         </div>
 
-      <div class="container has-text-centered is-inline-mobile" style="margin-top:3.5rem; width: 360px">
+      <div class="container has-text-centered is-block-mobile" style="margin-top:3.5rem; width: 360px">
         <form id="submit_form" class="lmk-text-align-center" action="/submitted" method="POST">
           <div class="field" id="bloodhound">
             <div class="control">
@@ -155,7 +156,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     </section>
     </body>
 
-    <footer class="footer" style="margin-bottom:1rem">
+    <footer class="footer">
       <div class="container">
         <div class="content has-text-centered">
           <p style="font-size:0.8rem">
