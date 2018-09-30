@@ -67,7 +67,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         <div class="level" style="margin-bottom:0.5rem">
           <div class="level-item">
             <figure class="image is-64x64" style="padding-right:1rem">
-            <img src="/PCA_logo.svg">
+            <img src="./src/js/PCA_logo.svg">
             </figure>
             <h1 class="title">
               Penn Course Alert
@@ -113,7 +113,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         <form id="submit_form" class="lmk-text-align-center" action="/submitted" method="POST">
           <div class="field" id="bloodhound">
             <div class="control">
-              <input class="input is-medium" type="text" placeholder="Course" id="course" name="course" required>
+              <input class="input is-medium typeahead" type="text" placeholder="Course" id="course" name="course" required>
             </div>
           </div>
           <div class="field">
@@ -124,7 +124,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           <div class="field">
             <div class="control">
               <!--<br />Optional: Text Message Notifications<br />-->
-              <input class="input is-medium" type="tel" placeholder="Phone bumber (for text alerts)" id="phone" name="phone">
+              <input class="input is-medium" type="tel" placeholder="Phone number (for text alerts)" id="phone" name="phone">
               <!--Carrier<br /> action="/submitted" method="POST">-->
             </div>
           </div>
