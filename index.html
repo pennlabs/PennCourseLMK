@@ -62,7 +62,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
     </style>
   </head>
   <body>
-    <section class="section">
+    <section class="section is-inline-mobile">
       <div class="container has-text-centered">
         <div class="level" style="margin-bottom:0.5rem">
           <div class="level-item">
@@ -92,8 +92,8 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
               <div class="modal-body">
                 <p>Would you like to keep receiving notifications?</p>
               </div>
-              <button type="button" class="btn btn-primary" onClick='resubmit()'>Resubscribe</button>
-              <button type="button" id="unsubscribe" class="btn btn-default" onClick='resubscribe()'>Unsubscribe</button>
+              <button type="button" class="button is-info" onClick='resubmit()'>Resubscribe</button>
+              <button type="button" id="unsubscribe" class="button is-info" onClick='resubscribe()'>Unsubscribe</button>
               <script>
                 function resubmit() {
                   $('#submit_form').submit();
@@ -109,7 +109,7 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
           </div>
         </div>
 
-      <div class="container has-text-centered" style="margin-top:3.5rem; width: 360px">
+      <div class="container has-text-centered is-inline-mobile" style="margin-top:3.5rem; width: 360px">
         <form id="submit_form" class="lmk-text-align-center" action="/submitted" method="POST">
           <div class="field" id="bloodhound">
             <div class="control">
