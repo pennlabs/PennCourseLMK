@@ -38,6 +38,29 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
         position: relative;
         padding-bottom: 150px;
       }
+      .tt-menu {
+        width: 100%;
+      }
+      .lmk-rec-element {
+        background-color: white;
+        cursor: pointer;
+        text-align: left;
+      }
+      .lmk-command-icon {
+        float: right;
+      }
+      .lmk-rec-element:hover {
+        color: #FAFCFF;
+        background-color: #2588c0;
+      }
+      .tt-dataset {
+        overflow: auto;
+        height: 15em;
+        box-shadow: 0px 2px 4px;
+      }
+      .twitter-typeahead {
+        width: 100%;
+      }
       .input {
         border-style: hidden;
         border-radius: 0px;
@@ -118,9 +141,9 @@ CJFblaXvAAAAAElFTkSuQmCC"/>
 
       <div class="container has-text-centered is-block-mobile wrapper" style="margin-top:3.5rem" id="wrapper">
         <form id="submit_form" action="/submitted" method="POST">
-          <div class="field" id="bloodhound" class="input-wrapper">
-            <div class="control" >
-              <input class="input is-medium typeahead" type="text" placeholder="Course" id="course" name="course" required>
+          <div class="field" class="input-wrapper">
+            <div class="control" id="bloodhound">
+              <input class="input is-medium" id="courseTypeahead" type="text" placeholder="Course" id="course" name="course" required>
             </div>
           </div>
           <div class="field" class="input-wrapper">

@@ -28,7 +28,7 @@ $(document).ready(function(){
     }
     });
 
-  $('#bloodhound .typeahead').typeahead({
+  $('#bloodhound #courseTypeahead').typeahead({
     hint: true,
     highlight: false,
     minLength: 1,
@@ -38,18 +38,19 @@ $(document).ready(function(){
     source: courses,
     display: 'section_id',
     templates: {
-      empty: '<div class="lmk-rec-element list-group-item">No matching courses found.</div>',
+      empty: '<div class="lmk-rec-element card"><div class="card-content">No matching courses found.</div></div>',
       suggestion: function(data) {
         var instructors = ''
-        if(data.instructors.length != 0){ 
+        if(data.instructors.length != 0){
           var instructors = data.instructors.join(', ')
         }
-        return '<div class="lmk-rec-element list-group-item">' +
+        return '<div class="lmk-rec-element card">' +
           // '<p>' + data.section_id + '</p>' +
+          '<div class="card-content">' +
           data.section_id + '<br />' +
           '<small>' + data.course_title + '</small>' +
           '<span class="lmk-command-icon">'+getDemandIcon(data.demand)+'</span>' +
-          '</div>';
+          '</div></div>';
       }
     }
   });
