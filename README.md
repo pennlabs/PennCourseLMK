@@ -1,4 +1,7 @@
 # PennCourseLMK
+
+***This repository has been superceded by [Penn Course Alert](https://github.com/pennlabs/penncoursealert)***
+
 Getting started:
 1. Do `npm install`
 2. Make sure you have [MongoDB](https://www.mongodb.com/download-center) installed. Create a `data/db` directory and run `mongod --dbpath=data/db`.
